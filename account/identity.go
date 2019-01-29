@@ -66,13 +66,13 @@ func CreateID(nonce []byte) (string, error) {
 }
 
 func VerifyID(id string) bool {
-	if len(id) < 9 {
+	if len(id) < 10 {
 		return false
 	}
-	if id[0:8] != "did:onyx:" {
+	if id[0:9] != "did:onyx:" {
 		return false
 	}
-	buf, err := base58.BitcoinEncoding.Decode([]byte(id[8:]))
+	buf, err := base58.BitcoinEncoding.Decode([]byte(id[9:]))
 	if err != nil {
 		return false
 	}
