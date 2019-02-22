@@ -18,7 +18,9 @@
 
 package utils
 
-import "github.com/OnyxPay/OnyxChain-legacy/common/constants"
+import (
+	"github.com/OnyxPay/OnyxChain-legacy/common/constants"
+)
 
 var (
 	TIME_INTERVAL     = constants.UNBOUND_TIME_INTERVAL
@@ -47,9 +49,11 @@ func CalcUnbindOng(balance uint64, startOffset, endOffset uint32) uint64 {
 		}
 		amount += uint64(iend-istart) * GENERATION_AMOUNT[ustart]
 	}
-	if amount < constants.SUPPLY_RATIO {
+	result := uint64(amount) * balance
+
+	if result < 10 {
 		return 0
 	}
 
-	return uint64(uint64(amount)*balance) / constants.SUPPLY_RATIO
+	return result / 10
 }
