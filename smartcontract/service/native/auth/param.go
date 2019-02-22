@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package auth
@@ -30,11 +30,11 @@ import (
 
 /* **********************************************   */
 type InitContractAdminParam struct {
-	AdminOnyxID []byte
+	AdminOntID []byte
 }
 
 func (this *InitContractAdminParam) Serialize(w io.Writer) error {
-	if err := serialization.WriteVarBytes(w, this.AdminOnyxID); err != nil {
+	if err := serialization.WriteVarBytes(w, this.AdminOntID); err != nil {
 		return err
 	}
 	return nil
@@ -42,7 +42,7 @@ func (this *InitContractAdminParam) Serialize(w io.Writer) error {
 
 func (this *InitContractAdminParam) Deserialize(rd io.Reader) error {
 	var err error
-	if this.AdminOnyxID, err = serialization.ReadVarBytes(rd); err != nil {
+	if this.AdminOntID, err = serialization.ReadVarBytes(rd); err != nil {
 		return err
 	}
 	return nil
@@ -51,7 +51,7 @@ func (this *InitContractAdminParam) Deserialize(rd io.Reader) error {
 /* **********************************************   */
 type TransferParam struct {
 	ContractAddr  common.Address
-	NewAdminOnyxID []byte
+	NewAdminOntID []byte
 	KeyNo         uint64
 }
 
@@ -59,7 +59,7 @@ func (this *TransferParam) Serialize(w io.Writer) error {
 	if err := serializeAddress(w, this.ContractAddr); err != nil {
 		return err
 	}
-	if err := serialization.WriteVarBytes(w, this.NewAdminOnyxID); err != nil {
+	if err := serialization.WriteVarBytes(w, this.NewAdminOntID); err != nil {
 		return err
 	}
 	if err := utils.WriteVarUint(w, this.KeyNo); err != nil {
@@ -73,7 +73,7 @@ func (this *TransferParam) Deserialize(rd io.Reader) error {
 	if this.ContractAddr, err = utils.ReadAddress(rd); err != nil {
 		return err
 	}
-	if this.NewAdminOnyxID, err = serialization.ReadVarBytes(rd); err != nil {
+	if this.NewAdminOntID, err = serialization.ReadVarBytes(rd); err != nil {
 		return err
 	}
 	if this.KeyNo, err = utils.ReadVarUint(rd); err != nil {
@@ -85,7 +85,7 @@ func (this *TransferParam) Deserialize(rd io.Reader) error {
 /* **********************************************   */
 type FuncsToRoleParam struct {
 	ContractAddr common.Address
-	AdminOnyxID   []byte
+	AdminOntID   []byte
 	Role         []byte
 	FuncNames    []string
 	KeyNo        uint64
@@ -95,7 +95,7 @@ func (this *FuncsToRoleParam) Serialize(w io.Writer) error {
 	if err := serializeAddress(w, this.ContractAddr); err != nil {
 		return err
 	}
-	if err := serialization.WriteVarBytes(w, this.AdminOnyxID); err != nil {
+	if err := serialization.WriteVarBytes(w, this.AdminOntID); err != nil {
 		return err
 	}
 	if err := serialization.WriteVarBytes(w, this.Role); err != nil {
@@ -123,7 +123,7 @@ func (this *FuncsToRoleParam) Deserialize(rd io.Reader) error {
 	if this.ContractAddr, err = utils.ReadAddress(rd); err != nil {
 		return err
 	}
-	if this.AdminOnyxID, err = serialization.ReadVarBytes(rd); err != nil {
+	if this.AdminOntID, err = serialization.ReadVarBytes(rd); err != nil {
 		return err
 	}
 	if this.Role, err = serialization.ReadVarBytes(rd); err != nil {
@@ -146,19 +146,19 @@ func (this *FuncsToRoleParam) Deserialize(rd io.Reader) error {
 	return nil
 }
 
-type OnyxIDsToRoleParam struct {
+type OntIDsToRoleParam struct {
 	ContractAddr common.Address
-	AdminOnyxID   []byte
+	AdminOntID   []byte
 	Role         []byte
 	Persons      [][]byte
 	KeyNo        uint64
 }
 
-func (this *OnyxIDsToRoleParam) Serialize(w io.Writer) error {
+func (this *OntIDsToRoleParam) Serialize(w io.Writer) error {
 	if err := serializeAddress(w, this.ContractAddr); err != nil {
 		return err
 	}
-	if err := serialization.WriteVarBytes(w, this.AdminOnyxID); err != nil {
+	if err := serialization.WriteVarBytes(w, this.AdminOntID); err != nil {
 		return err
 	}
 	if err := serialization.WriteVarBytes(w, this.Role); err != nil {
@@ -178,13 +178,13 @@ func (this *OnyxIDsToRoleParam) Serialize(w io.Writer) error {
 	return nil
 }
 
-func (this *OnyxIDsToRoleParam) Deserialize(rd io.Reader) error {
+func (this *OntIDsToRoleParam) Deserialize(rd io.Reader) error {
 	var err error
 	var pLen uint64
 	if this.ContractAddr, err = utils.ReadAddress(rd); err != nil {
 		return err
 	}
-	if this.AdminOnyxID, err = serialization.ReadVarBytes(rd); err != nil {
+	if this.AdminOntID, err = serialization.ReadVarBytes(rd); err != nil {
 		return err
 	}
 	if this.Role, err = serialization.ReadVarBytes(rd); err != nil {

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package rest
@@ -25,7 +25,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/common/log"
 	scom "github.com/OnyxPay/OnyxChain-legacy/core/store/common"
 	"github.com/OnyxPay/OnyxChain-legacy/core/types"
-	onyxErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
+	ontErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
 	bactor "github.com/OnyxPay/OnyxChain-legacy/http/base/actor"
 	bcomn "github.com/OnyxPay/OnyxChain-legacy/http/base/common"
 	berr "github.com/OnyxPay/OnyxChain-legacy/http/base/error"
@@ -279,7 +279,7 @@ func SendRawTransaction(cmd map[string]interface{}) map[string]interface{} {
 		}
 	}
 	log.Debugf("SendRawTransaction send to txpool %s", hash.ToHexString())
-	if errCode, desc := bcomn.SendTxToPool(txn); errCode != onyxErrors.ErrNoError {
+	if errCode, desc := bcomn.SendTxToPool(txn); errCode != ontErrors.ErrNoError {
 		resp["Error"] = int64(errCode)
 		resp["Result"] = desc
 		log.Warnf("SendRawTransaction verified %s error: %s", hash.ToHexString(), desc)
@@ -510,8 +510,8 @@ func GetAllowance(cmd map[string]interface{}) map[string]interface{} {
 	return resp
 }
 
-//get unbound oxg
-func GetUnboundOxg(cmd map[string]interface{}) map[string]interface{} {
+//get unbound ong
+func GetUnboundOng(cmd map[string]interface{}) map[string]interface{} {
 	resp := ResponsePack(berr.SUCCESS)
 	toAddrStr, ok := cmd["Addr"].(string)
 	if !ok {
@@ -521,18 +521,18 @@ func GetUnboundOxg(cmd map[string]interface{}) map[string]interface{} {
 	if err != nil {
 		return ResponsePack(berr.INVALID_PARAMS)
 	}
-	fromAddr := utils.OnyxContractAddress
-	rsp, err := bcomn.GetAllowance("oxg", fromAddr, toAddr)
+	fromAddr := utils.OntContractAddress
+	rsp, err := bcomn.GetAllowance("ong", fromAddr, toAddr)
 	if err != nil {
 		return ResponsePack(berr.INVALID_PARAMS)
 	}
-	bcomn.GetGrantOxg(toAddr)
+	bcomn.GetGrantOng(toAddr)
 	resp["Result"] = rsp
 	return resp
 }
 
-//get grant oxg
-func GetGrantOxg(cmd map[string]interface{}) map[string]interface{} {
+//get grant ong
+func GetGrantOng(cmd map[string]interface{}) map[string]interface{} {
 	resp := ResponsePack(berr.SUCCESS)
 	toAddrStr, ok := cmd["Addr"].(string)
 	if !ok {
@@ -542,7 +542,7 @@ func GetGrantOxg(cmd map[string]interface{}) map[string]interface{} {
 	if err != nil {
 		return ResponsePack(berr.INVALID_PARAMS)
 	}
-	rsp, err := bcomn.GetGrantOxg(toAddr)
+	rsp, err := bcomn.GetGrantOng(toAddr)
 	if err != nil {
 		return ResponsePack(berr.INTERNAL_ERROR)
 	}

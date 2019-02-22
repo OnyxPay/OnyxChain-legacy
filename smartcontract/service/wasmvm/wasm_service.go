@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 package wasmvm
 
@@ -33,7 +33,7 @@ import (
 	//sccommon "github.com/OnyxPay/OnyxChain-legacy/smartcontract/common"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/context"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/event"
-	//nstates "github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onyx"
+	//nstates "github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
 	//"github.com/OnyxPay/OnyxChain-legacy/smartcontract/states"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/storage"
 	//"github.com/OnyxPay/OnyxChain-legacy/vm/neovm"
@@ -55,54 +55,54 @@ type WasmVmService struct {
 //func (this *WasmVmService) Invoke() (interface{}, error) {
 //	stateMachine := NewWasmStateMachine()
 //	//register the "CallContract" function
-//	stateMachine.Register("ONYX_CallContract", this.callContract)
-//	stateMachine.Register("ONYX_MarshalNativeParams", this.marshalNativeParams)
-//	stateMachine.Register("ONYX_MarshalNeoParams", this.marshalNeoParams)
+//	stateMachine.Register("ONT_CallContract", this.callContract)
+//	stateMachine.Register("ONT_MarshalNativeParams", this.marshalNativeParams)
+//	stateMachine.Register("ONT_MarshalNeoParams", this.marshalNeoParams)
 //	//runtime
-//	stateMachine.Register("ONYX_Runtime_CheckWitness", this.runtimeCheckWitness)
-//	stateMachine.Register("ONYX_Runtime_Notify", this.runtimeNotify)
-//	stateMachine.Register("ONYX_Runtime_CheckSig", this.runtimeCheckSig)
-//	stateMachine.Register("ONYX_Runtime_GetTime", this.runtimeGetTime)
-//	stateMachine.Register("ONYX_Runtime_Log", this.runtimeLog)
+//	stateMachine.Register("ONT_Runtime_CheckWitness", this.runtimeCheckWitness)
+//	stateMachine.Register("ONT_Runtime_Notify", this.runtimeNotify)
+//	stateMachine.Register("ONT_Runtime_CheckSig", this.runtimeCheckSig)
+//	stateMachine.Register("ONT_Runtime_GetTime", this.runtimeGetTime)
+//	stateMachine.Register("ONT_Runtime_Log", this.runtimeLog)
 //	//attribute
-//	stateMachine.Register("ONYX_Attribute_GetUsage", this.attributeGetUsage)
-//	stateMachine.Register("ONYX_Attribute_GetData", this.attributeGetData)
+//	stateMachine.Register("ONT_Attribute_GetUsage", this.attributeGetUsage)
+//	stateMachine.Register("ONT_Attribute_GetData", this.attributeGetData)
 //	//block
-//	stateMachine.Register("ONYX_Block_GetCurrentHeaderHash", this.blockGetCurrentHeaderHash)
-//	stateMachine.Register("ONYX_Block_GetCurrentHeaderHeight", this.blockGetCurrentHeaderHeight)
-//	stateMachine.Register("ONYX_Block_GetCurrentBlockHash", this.blockGetCurrentBlockHash)
-//	stateMachine.Register("ONYX_Block_GetCurrentBlockHeight", this.blockGetCurrentBlockHeight)
-//	stateMachine.Register("ONYX_Block_GetTransactionByHash", this.blockGetTransactionByHash)
-//	stateMachine.Register("ONYX_Block_GetTransactionCount", this.blockGetTransactionCount)
-//	stateMachine.Register("ONYX_Block_GetTransactions", this.blockGetTransactions)
+//	stateMachine.Register("ONT_Block_GetCurrentHeaderHash", this.blockGetCurrentHeaderHash)
+//	stateMachine.Register("ONT_Block_GetCurrentHeaderHeight", this.blockGetCurrentHeaderHeight)
+//	stateMachine.Register("ONT_Block_GetCurrentBlockHash", this.blockGetCurrentBlockHash)
+//	stateMachine.Register("ONT_Block_GetCurrentBlockHeight", this.blockGetCurrentBlockHeight)
+//	stateMachine.Register("ONT_Block_GetTransactionByHash", this.blockGetTransactionByHash)
+//	stateMachine.Register("ONT_Block_GetTransactionCount", this.blockGetTransactionCount)
+//	stateMachine.Register("ONT_Block_GetTransactions", this.blockGetTransactions)
 //
 //	//blockchain
-//	stateMachine.Register("ONYX_BlockChain_GetHeight", this.blockChainGetHeight)
-//	stateMachine.Register("ONYX_BlockChain_GetHeaderByHeight", this.blockChainGetHeaderByHeight)
-//	stateMachine.Register("ONYX_BlockChain_GetHeaderByHash", this.blockChainGetHeaderByHash)
-//	stateMachine.Register("ONYX_BlockChain_GetBlockByHeight", this.blockChainGetBlockByHeight)
-//	stateMachine.Register("ONYX_BlockChain_GetBlockByHash", this.blockChainGetBlockByHash)
-//	stateMachine.Register("ONYX_BlockChain_GetContract", this.blockChainGetContract)
+//	stateMachine.Register("ONT_BlockChain_GetHeight", this.blockChainGetHeight)
+//	stateMachine.Register("ONT_BlockChain_GetHeaderByHeight", this.blockChainGetHeaderByHeight)
+//	stateMachine.Register("ONT_BlockChain_GetHeaderByHash", this.blockChainGetHeaderByHash)
+//	stateMachine.Register("ONT_BlockChain_GetBlockByHeight", this.blockChainGetBlockByHeight)
+//	stateMachine.Register("ONT_BlockChain_GetBlockByHash", this.blockChainGetBlockByHash)
+//	stateMachine.Register("ONT_BlockChain_GetContract", this.blockChainGetContract)
 //
 //	//header
-//	stateMachine.Register("ONYX_Header_GetHash", this.headerGetHash)
-//	stateMachine.Register("ONYX_Header_GetVersion", this.headerGetVersion)
-//	stateMachine.Register("ONYX_Header_GetPrevHash", this.headerGetPrevHash)
-//	stateMachine.Register("ONYX_Header_GetMerkleRoot", this.headerGetMerkleRoot)
-//	stateMachine.Register("ONYX_Header_GetIndex", this.headerGetIndex)
-//	stateMachine.Register("ONYX_Header_GetTimestamp", this.headerGetTimestamp)
-//	stateMachine.Register("ONYX_Header_GetConsensusData", this.headerGetConsensusData)
-//	stateMachine.Register("ONYX_Header_GetNextConsensus", this.headerGetNextConsensus)
+//	stateMachine.Register("ONT_Header_GetHash", this.headerGetHash)
+//	stateMachine.Register("ONT_Header_GetVersion", this.headerGetVersion)
+//	stateMachine.Register("ONT_Header_GetPrevHash", this.headerGetPrevHash)
+//	stateMachine.Register("ONT_Header_GetMerkleRoot", this.headerGetMerkleRoot)
+//	stateMachine.Register("ONT_Header_GetIndex", this.headerGetIndex)
+//	stateMachine.Register("ONT_Header_GetTimestamp", this.headerGetTimestamp)
+//	stateMachine.Register("ONT_Header_GetConsensusData", this.headerGetConsensusData)
+//	stateMachine.Register("ONT_Header_GetNextConsensus", this.headerGetNextConsensus)
 //
 //	//storage
-//	stateMachine.Register("ONYX_Storage_Put", this.putstore)
-//	stateMachine.Register("ONYX_Storage_Get", this.getstore)
-//	stateMachine.Register("ONYX_Storage_Delete", this.deletestore)
+//	stateMachine.Register("ONT_Storage_Put", this.putstore)
+//	stateMachine.Register("ONT_Storage_Get", this.getstore)
+//	stateMachine.Register("ONT_Storage_Delete", this.deletestore)
 //
 //	//transaction
-//	stateMachine.Register("ONYX_Transaction_GetHash", this.transactionGetHash)
-//	stateMachine.Register("ONYX_Transaction_GetType", this.transactionGetType)
-//	stateMachine.Register("ONYX_Transaction_GetAttributes", this.transactionGetAttributes)
+//	stateMachine.Register("ONT_Transaction_GetHash", this.transactionGetHash)
+//	stateMachine.Register("ONT_Transaction_GetType", this.transactionGetType)
+//	stateMachine.Register("ONT_Transaction_GetAttributes", this.transactionGetAttributes)
 //
 //	engine := exec.NewExecutionEngine(
 //		this.Tx,

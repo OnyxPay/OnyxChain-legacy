@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Package restful privides restful server router and handler
@@ -67,8 +67,8 @@ const (
 	GET_MERKLE_PROOF      = "/api/v1/merkleproof/:hash"
 	GET_GAS_PRICE         = "/api/v1/gasprice"
 	GET_ALLOWANCE         = "/api/v1/allowance/:asset/:from/:to"
-	GET_UNBOUNDONG        = "/api/v1/unboundoxg/:addr"
-	GET_GRANTONG          = "/api/v1/grantoxg/:addr"
+	GET_UNBOUNDONG        = "/api/v1/unboundong/:addr"
+	GET_GRANTONG          = "/api/v1/grantong/:addr"
 	GET_MEMPOOL_TXCOUNT   = "/api/v1/mempool/txcount"
 	GET_MEMPOOL_TXSTATE   = "/api/v1/mempool/txstate/:hash"
 	GET_VERSION           = "/api/v1/version"
@@ -143,8 +143,8 @@ func (this *restServer) registryMethod() {
 		GET_ALLOWANCE:         {name: "getallowance", handler: rest.GetAllowance},
 		GET_MERKLE_PROOF:      {name: "getmerkleproof", handler: rest.GetMerkleProof},
 		GET_GAS_PRICE:         {name: "getgasprice", handler: rest.GetGasPrice},
-		GET_UNBOUNDONG:        {name: "getunboundoxg", handler: rest.GetUnboundOxg},
-		GET_GRANTONG:          {name: "getgrantoxg", handler: rest.GetGrantOxg},
+		GET_UNBOUNDONG:        {name: "getunboundong", handler: rest.GetUnboundOng},
+		GET_GRANTONG:          {name: "getgrantong", handler: rest.GetGrantOng},
 		GET_MEMPOOL_TXCOUNT:   {name: "getmempooltxcount", handler: rest.GetMemPoolTxCount},
 		GET_MEMPOOL_TXSTATE:   {name: "getmempooltxstate", handler: rest.GetMemPoolTxState},
 		GET_VERSION:           {name: "getversion", handler: rest.GetNodeVersion},

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package governance
@@ -540,7 +540,7 @@ func (this *PreConfig) Deserialize(r io.Reader) error {
 }
 
 type GlobalParam struct {
-	CandidateFee uint64 //unit: 10^-9 oxg
+	CandidateFee uint64 //unit: 10^-9 ong
 	MinInitStake uint32 //min init pos
 	CandidateNum uint32 //num of candidate and consensus node
 	PosLimit     uint32 //authorize pos limit is initPos*posLimit
@@ -644,7 +644,7 @@ func (this *GlobalParam) Deserialize(r io.Reader) error {
 }
 
 type GlobalParam2 struct {
-	MinAuthorizePos      uint32 //min ONYX of each authorization, 500 default
+	MinAuthorizePos      uint32 //min ONT of each authorization, 500 default
 	CandidateFeeSplitNum uint32 //num of peer can receive motivation(include consensus and candidate)
 	Field1               []byte //reserved field
 	Field2               []byte //reserved field
@@ -801,18 +801,18 @@ func (this *TransferPenaltyParam) Deserialize(r io.Reader) error {
 	return nil
 }
 
-type WithdrawOxgParam struct {
+type WithdrawOngParam struct {
 	Address common.Address
 }
 
-func (this *WithdrawOxgParam) Serialize(w io.Writer) error {
+func (this *WithdrawOngParam) Serialize(w io.Writer) error {
 	if err := serialization.WriteVarBytes(w, this.Address[:]); err != nil {
 		return fmt.Errorf("serialization.WriteVarBytes, serialize address error: %v", err)
 	}
 	return nil
 }
 
-func (this *WithdrawOxgParam) Deserialize(r io.Reader) error {
+func (this *WithdrawOngParam) Deserialize(r io.Reader) error {
 	address, err := utils.ReadAddress(r)
 	if err != nil {
 		return fmt.Errorf("utils.ReadAddress, deserialize address error: %v", err)

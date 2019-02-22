@@ -1,42 +1,42 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package errors
 
-type onyxError struct {
+type ontError struct {
 	errmsg    string
 	callstack *CallStack
 	root      error
 	code      ErrCode
 }
 
-func (e onyxError) Error() string {
+func (e ontError) Error() string {
 	return e.errmsg
 }
 
-func (e onyxError) GetErrCode() ErrCode {
+func (e ontError) GetErrCode() ErrCode {
 	return e.code
 }
 
-func (e onyxError) GetRoot() error {
+func (e ontError) GetRoot() error {
 	return e.root
 }
 
-func (e onyxError) GetCallStack() *CallStack {
+func (e ontError) GetCallStack() *CallStack {
 	return e.callstack
 }

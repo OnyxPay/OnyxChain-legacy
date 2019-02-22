@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package utils
@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	PRECISION_OXG = 9
+	PRECISION_ONG = 9
 	PRECISION_ONT = 0
 )
 
@@ -65,31 +65,31 @@ func ParseAssetAmount(rawAmount string, precision byte) uint64 {
 	return amount
 }
 
-func FormatOxg(amount uint64) string {
-	return FormatAssetAmount(amount, PRECISION_OXG)
+func FormatOng(amount uint64) string {
+	return FormatAssetAmount(amount, PRECISION_ONG)
 }
 
-func ParseOxg(rawAmount string) uint64 {
-	return ParseAssetAmount(rawAmount, PRECISION_OXG)
+func ParseOng(rawAmount string) uint64 {
+	return ParseAssetAmount(rawAmount, PRECISION_ONG)
 }
 
-func FormatOnyx(amount uint64) string {
+func FormatOnt(amount uint64) string {
 	return FormatAssetAmount(amount, PRECISION_ONT)
 }
 
-func ParseOnyx(rawAmount string) uint64 {
+func ParseOnt(rawAmount string) uint64 {
 	return ParseAssetAmount(rawAmount, PRECISION_ONT)
 }
 
 func CheckAssetAmount(asset string, amount uint64) error {
 	switch strings.ToLower(asset) {
-	case "onyx":
-		if amount > constants.ONYX_TOTAL_SUPPLY {
-			return fmt.Errorf("amount:%d larger than ONYX total supply:%d", amount, constants.ONYX_TOTAL_SUPPLY)
+	case "ont":
+		if amount > constants.ONT_TOTAL_SUPPLY {
+			return fmt.Errorf("amount:%d larger than ONT total supply:%d", amount, constants.ONT_TOTAL_SUPPLY)
 		}
-	case "oxg":
-		if amount > constants.OXG_TOTAL_SUPPLY {
-			return fmt.Errorf("amount:%d larger than oxg total supply:%d", amount, constants.OXG_TOTAL_SUPPLY)
+	case "ong":
+		if amount > constants.ONG_TOTAL_SUPPLY {
+			return fmt.Errorf("amount:%d larger than ONG total supply:%d", amount, constants.ONG_TOTAL_SUPPLY)
 		}
 	default:
 		return fmt.Errorf("unknown asset:%s", asset)

@@ -1,0 +1,8 @@
+language: go
+
+install:
+  - go get github.com/Masterminds/glide
+  - glide install
+
+go:
+  - 1.9.x

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package constants
@@ -28,23 +28,26 @@ var (
 	GENESIS_BLOCK_TIMESTAMP = uint32(time.Date(2018, time.June, 30, 0, 0, 0, 0, time.UTC).Unix())
 )
 
-// onyx constants
+// Onyx total supply ratio
+const SUPPLY_RATIO = uint64(10 * 100000000)
+
+// ont constants
 const (
-	ONYX_NAME         = "ONYX Token"
-	ONYX_SYMBOL       = "ONYX"
-	ONYX_DECIMALS     = 1
-	ONYX_TOTAL_SUPPLY = uint64(1000000000)
+	ONT_NAME         = "ONT Token"
+	ONT_SYMBOL       = "ONT"
+	ONT_DECIMALS     = 1 * 8
+	ONT_TOTAL_SUPPLY = uint64(1000000000 * SUPPLY_RATIO)
 )
 
-// oxg constants
+// ong constants
 const (
-	OXG_NAME         = "oxg Token"
-	OXG_SYMBOL       = "oxg"
-	OXG_DECIMALS     = 9
-	OXG_TOTAL_SUPPLY = uint64(1000000000000000000)
+	ONG_NAME         = "ONG Token"
+	ONG_SYMBOL       = "ONG"
+	ONG_DECIMALS     = 9
+	ONG_TOTAL_SUPPLY = uint64(1000000000000000000)
 )
 
-// onyx/oxg unbound model constants
+// ont/ong unbound model constants
 const UNBOUND_TIME_INTERVAL = uint32(31536000)
 
 var UNBOUND_GENERATION_AMOUNT = [18]uint64{5, 4, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
@@ -58,13 +61,14 @@ var UNBOUND_DEADLINE = (func() uint32 {
 	count *= uint64(UNBOUND_TIME_INTERVAL)
 
 	numInterval := len(UNBOUND_GENERATION_AMOUNT)
+	supply := ONT_TOTAL_SUPPLY / SUPPLY_RATIO
 
 	if UNBOUND_GENERATION_AMOUNT[numInterval-1] != 1 ||
-		!(count-uint64(UNBOUND_TIME_INTERVAL) < ONYX_TOTAL_SUPPLY && ONYX_TOTAL_SUPPLY <= count) {
+		!(count-uint64(UNBOUND_TIME_INTERVAL) < supply && supply <= count) {
 		panic("incompatible constants setting")
 	}
 
-	return UNBOUND_TIME_INTERVAL*uint32(numInterval) - uint32(count-uint64(ONYX_TOTAL_SUPPLY))
+	return UNBOUND_TIME_INTERVAL*uint32(numInterval) - uint32(count-uint64(supply))
 })()
 
 // multi-sig constants

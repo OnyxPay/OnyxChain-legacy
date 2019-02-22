@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Package common privides functions for http handler call
@@ -31,10 +31,10 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/core/ledger"
 	"github.com/OnyxPay/OnyxChain-legacy/core/payload"
 	"github.com/OnyxPay/OnyxChain-legacy/core/types"
-	onyxErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
+	ontErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
 	bactor "github.com/OnyxPay/OnyxChain-legacy/http/base/actor"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/event"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onyx"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/utils"
 	svrneovm "github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/neovm"
 	"github.com/OnyxPay/OnyxChain-legacy/vm/neovm"
@@ -47,8 +47,8 @@ import (
 const MAX_SEARCH_HEIGHT uint32 = 100
 
 type BalanceOfRsp struct {
-	Onyx string `json:"onyx"`
-	Oxg string `json:"oxg"`
+	Ont string `json:"ont"`
+	Ong string `json:"ong"`
 }
 
 type MerkleProof struct {
@@ -210,12 +210,12 @@ func TransArryByteToHexString(ptx *types.Transaction) *Transactions {
 	return trans
 }
 
-func SendTxToPool(txn *types.Transaction) (onyxErrors.ErrCode, string) {
-	if errCode, desc := bactor.AppendTxToPool(txn); errCode != onyxErrors.ErrNoError {
+func SendTxToPool(txn *types.Transaction) (ontErrors.ErrCode, string) {
+	if errCode, desc := bactor.AppendTxToPool(txn); errCode != ontErrors.ErrNoError {
 		log.Warn("TxnPool verify error:", errCode.Error())
 		return errCode, desc
 	}
-	return onyxErrors.ErrNoError, ""
+	return ontErrors.ErrNoError, ""
 }
 
 func GetBlockInfo(block *types.Block) BlockInfo {
@@ -262,23 +262,23 @@ func GetBlockInfo(block *types.Block) BlockInfo {
 }
 
 func GetBalance(address common.Address) (*BalanceOfRsp, error) {
-	onyx, err := GetContractBalance(0, utils.OnyxContractAddress, address)
+	ont, err := GetContractBalance(0, utils.OntContractAddress, address)
 	if err != nil {
-		return nil, fmt.Errorf("get onyx balance error:%s", err)
+		return nil, fmt.Errorf("get ont balance error:%s", err)
 	}
-	oxg, err := GetContractBalance(0, utils.OxgContractAddress, address)
+	ong, err := GetContractBalance(0, utils.OngContractAddress, address)
 	if err != nil {
-		return nil, fmt.Errorf("get onyx balance error:%s", err)
+		return nil, fmt.Errorf("get ont balance error:%s", err)
 	}
 	return &BalanceOfRsp{
-		Onyx: fmt.Sprintf("%d", onyx),
-		Oxg: fmt.Sprintf("%d", oxg),
+		Ont: fmt.Sprintf("%d", ont),
+		Ong: fmt.Sprintf("%d", ong),
 	}, nil
 }
 
-func GetGrantOxg(addr common.Address) (string, error) {
-	key := append([]byte(onyx.UNBOUND_TIME_OFFSET), addr[:]...)
-	value, err := ledger.DefLedger.GetStorageItem(utils.OnyxContractAddress, key)
+func GetGrantOng(addr common.Address) (string, error) {
+	key := append([]byte(ont.UNBOUND_TIME_OFFSET), addr[:]...)
+	value, err := ledger.DefLedger.GetStorageItem(utils.OntContractAddress, key)
 	if err != nil {
 		value = []byte{0, 0, 0, 0}
 	}
@@ -286,21 +286,21 @@ func GetGrantOxg(addr common.Address) (string, error) {
 	if err != nil {
 		return fmt.Sprintf("%v", 0), err
 	}
-	onyx, err := GetContractBalance(0, utils.OnyxContractAddress, addr)
+	ont, err := GetContractBalance(0, utils.OntContractAddress, addr)
 	if err != nil {
 		return fmt.Sprintf("%v", 0), err
 	}
-	boundong := utils.CalcUnbindOxg(onyx, v, uint32(time.Now().Unix())-constants.GENESIS_BLOCK_TIMESTAMP)
+	boundong := utils.CalcUnbindOng(ont, v, uint32(time.Now().Unix())-constants.GENESIS_BLOCK_TIMESTAMP)
 	return fmt.Sprintf("%v", boundong), nil
 }
 
 func GetAllowance(asset string, from, to common.Address) (string, error) {
 	var contractAddr common.Address
 	switch strings.ToLower(asset) {
-	case "onyx":
-		contractAddr = utils.OnyxContractAddress
-	case "oxg":
-		contractAddr = utils.OxgContractAddress
+	case "ont":
+		contractAddr = utils.OntContractAddress
+	case "ong":
+		contractAddr = utils.OngContractAddress
 	default:
 		return "", fmt.Errorf("unsupport asset")
 	}

@@ -1,0 +1,14 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch",
+			"type": "go",
+			"request": "launch",
+			"mode": "exec",
+			"program": "C:\\Program Files\\solo-chain\\resources\\app.asar.unpacked\\dist\\electron\\static\\ontology-windows-amd64.exe",
+			"env": {},
+			"args": ["--testmode", "-w", "C:\\Program Files\\solo-chain\\resources\\app.asar.unpacked\\dist\\electron\\static\\wallet.dat"]
+		}
+	]
+}

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package governance
@@ -38,7 +38,7 @@ func registerCandidate(native *native.NativeService, flag string) error {
 	}
 	contract := native.ContextRef.CurrentContext().ContractAddress
 
-	//check auth of OnyxID
+	//check auth of OntID
 	err := appCallVerifyToken(native, contract, params.Caller, REGISTER_CANDIDATE, uint64(params.KeyNo))
 	if err != nil {
 		return fmt.Errorf("appCallVerifyToken, verifyToken failed: %v", err)
@@ -106,28 +106,28 @@ func registerCandidate(native *native.NativeService, flag string) error {
 
 	switch flag {
 	case "transfer":
-		//onyx transfer
-		err = appCallTransferOnyx(native, params.Address, utils.GovernanceContractAddress, uint64(params.InitPos))
+		//ont transfer
+		err = appCallTransferOnt(native, params.Address, utils.GovernanceContractAddress, uint64(params.InitPos))
 		if err != nil {
-			return fmt.Errorf("appCallTransferOnyx, onyx transfer error: %v", err)
+			return fmt.Errorf("appCallTransferOnt, ont transfer error: %v", err)
 		}
 
-		//oxg transfer
-		err = appCallTransferOxg(native, params.Address, utils.GovernanceContractAddress, globalParam.CandidateFee)
+		//ong transfer
+		err = appCallTransferOng(native, params.Address, utils.GovernanceContractAddress, globalParam.CandidateFee)
 		if err != nil {
-			return fmt.Errorf("appCallTransferOxg, oxg transfer error: %v", err)
+			return fmt.Errorf("appCallTransferOng, ong transfer error: %v", err)
 		}
 	case "transferFrom":
-		//onyx transfer from
-		err = appCallTransferFromOnyx(native, utils.GovernanceContractAddress, params.Address, utils.GovernanceContractAddress, uint64(params.InitPos))
+		//ont transfer from
+		err = appCallTransferFromOnt(native, utils.GovernanceContractAddress, params.Address, utils.GovernanceContractAddress, uint64(params.InitPos))
 		if err != nil {
-			return fmt.Errorf("appCallTransferFromOnyx, onyx transfer error: %v", err)
+			return fmt.Errorf("appCallTransferFromOnt, ont transfer error: %v", err)
 		}
 
-		//oxg transfer from
-		err = appCallTransferFromOxg(native, utils.GovernanceContractAddress, params.Address, utils.GovernanceContractAddress, globalParam.CandidateFee)
+		//ong transfer from
+		err = appCallTransferFromOng(native, utils.GovernanceContractAddress, params.Address, utils.GovernanceContractAddress, globalParam.CandidateFee)
 		if err != nil {
-			return fmt.Errorf("appCallTransferFromOxg, oxg transfer error: %v", err)
+			return fmt.Errorf("appCallTransferFromOng, ong transfer error: %v", err)
 		}
 	}
 
@@ -231,16 +231,16 @@ func authorizeForPeer(native *native.NativeService, flag string) error {
 
 	switch flag {
 	case "transfer":
-		//onyx transfer
-		err = appCallTransferOnyx(native, params.Address, utils.GovernanceContractAddress, total)
+		//ont transfer
+		err = appCallTransferOnt(native, params.Address, utils.GovernanceContractAddress, total)
 		if err != nil {
-			return fmt.Errorf("appCallTransferOnyx, onyx transfer error: %v", err)
+			return fmt.Errorf("appCallTransferOnt, ont transfer error: %v", err)
 		}
 	case "transferFrom":
-		//onyx transfer from
-		err = appCallTransferFromOnyx(native, utils.GovernanceContractAddress, params.Address, utils.GovernanceContractAddress, total)
+		//ont transfer from
+		err = appCallTransferFromOnt(native, utils.GovernanceContractAddress, params.Address, utils.GovernanceContractAddress, total)
 		if err != nil {
-			return fmt.Errorf("appCallTransferFromOnyx, onyx transfer error: %v", err)
+			return fmt.Errorf("appCallTransferFromOnt, ont transfer error: %v", err)
 		}
 	}
 
@@ -306,10 +306,10 @@ func normalQuit(native *native.NativeService, contract common.Address, peerPoolI
 }
 
 func blackQuit(native *native.NativeService, contract common.Address, peerPoolItem *PeerPoolItem) error {
-	// onyx transfer to trigger unboundoxg
-	err := appCallTransferOnyx(native, utils.GovernanceContractAddress, utils.GovernanceContractAddress, peerPoolItem.InitPos)
+	// ont transfer to trigger unboundong
+	err := appCallTransferOnt(native, utils.GovernanceContractAddress, utils.GovernanceContractAddress, peerPoolItem.InitPos)
 	if err != nil {
-		return fmt.Errorf("appCallTransferOnyx, onyx transfer error: %v", err)
+		return fmt.Errorf("appCallTransferOnt, ont transfer error: %v", err)
 	}
 
 	//update total stake
@@ -560,10 +560,10 @@ func depositTotalStake(native *native.NativeService, contract common.Address, ad
 	preTimeOffset := totalStake.TimeOffset
 	timeOffset := native.Time - constants.GENESIS_BLOCK_TIMESTAMP
 
-	amount := utils.CalcUnbindOxg(preStake, preTimeOffset, timeOffset)
-	err = appCallTransferFromOxg(native, utils.GovernanceContractAddress, utils.OnyxContractAddress, totalStake.Address, amount)
+	amount := utils.CalcUnbindOng(preStake, preTimeOffset, timeOffset)
+	err = appCallTransferFromOng(native, utils.GovernanceContractAddress, utils.OntContractAddress, totalStake.Address, amount)
 	if err != nil {
-		return fmt.Errorf("appCallTransferFromOxg, transfer from oxg error: %v", err)
+		return fmt.Errorf("appCallTransferFromOng, transfer from ong error: %v", err)
 	}
 
 	totalStake.Stake = preStake + stake
@@ -582,17 +582,17 @@ func withdrawTotalStake(native *native.NativeService, contract common.Address, a
 		return fmt.Errorf("getTotalStake, get totalStake error: %v", err)
 	}
 	if totalStake.Stake < stake {
-		return fmt.Errorf("withdraw, onyx deposit is not enough")
+		return fmt.Errorf("withdraw, ont deposit is not enough")
 	}
 
 	preStake := totalStake.Stake
 	preTimeOffset := totalStake.TimeOffset
 	timeOffset := native.Time - constants.GENESIS_BLOCK_TIMESTAMP
 
-	amount := utils.CalcUnbindOxg(preStake, preTimeOffset, timeOffset)
-	err = appCallTransferFromOxg(native, utils.GovernanceContractAddress, utils.OnyxContractAddress, totalStake.Address, amount)
+	amount := utils.CalcUnbindOng(preStake, preTimeOffset, timeOffset)
+	err = appCallTransferFromOng(native, utils.GovernanceContractAddress, utils.OntContractAddress, totalStake.Address, amount)
 	if err != nil {
-		return fmt.Errorf("appCallTransferFromOxg, transfer from oxg error: %v", err)
+		return fmt.Errorf("appCallTransferFromOng, transfer from ong error: %v", err)
 	}
 
 	totalStake.Stake = preStake - stake
@@ -618,7 +618,7 @@ func depositPenaltyStake(native *native.NativeService, contract common.Address, 
 	preAmount := penaltyStake.Amount
 	timeOffset := native.Time - constants.GENESIS_BLOCK_TIMESTAMP
 
-	amount := utils.CalcUnbindOxg(preStake, preTimeOffset, timeOffset)
+	amount := utils.CalcUnbindOng(preStake, preTimeOffset, timeOffset)
 
 	penaltyStake.Amount = preAmount + amount
 	penaltyStake.InitPos = preInitPos + initPos
@@ -643,17 +643,17 @@ func withdrawPenaltyStake(native *native.NativeService, contract common.Address,
 	preAmount := penaltyStake.Amount
 	timeOffset := native.Time - constants.GENESIS_BLOCK_TIMESTAMP
 
-	amount := utils.CalcUnbindOxg(preStake, preTimeOffset, timeOffset)
+	amount := utils.CalcUnbindOng(preStake, preTimeOffset, timeOffset)
 
-	//onyx transfer
-	err = appCallTransferOnyx(native, utils.GovernanceContractAddress, address, preStake)
+	//ont transfer
+	err = appCallTransferOnt(native, utils.GovernanceContractAddress, address, preStake)
 	if err != nil {
-		return fmt.Errorf("appCallTransferOnyx, onyx transfer error: %v", err)
+		return fmt.Errorf("appCallTransferOnt, ont transfer error: %v", err)
 	}
-	//oxg approve
-	err = appCallTransferFromOxg(native, utils.GovernanceContractAddress, utils.OnyxContractAddress, address, amount+preAmount)
+	//ong approve
+	err = appCallTransferFromOng(native, utils.GovernanceContractAddress, utils.OntContractAddress, address, amount+preAmount)
 	if err != nil {
-		return fmt.Errorf("appCallTransferFromOxg, transfer from oxg error: %v", err)
+		return fmt.Errorf("appCallTransferFromOng, transfer from ong error: %v", err)
 	}
 
 	peerPubkeyPrefix, err := hex.DecodeString(peerPubkey)
@@ -714,9 +714,9 @@ func executeSplit(native *native.NativeService, contract common.Address, view ui
 		return fmt.Errorf("executeSplit, get peerPoolMap error: %v", err)
 	}
 
-	balance, err := getOxgBalance(native, utils.GovernanceContractAddress)
+	balance, err := getOngBalance(native, utils.GovernanceContractAddress)
 	if err != nil {
-		return fmt.Errorf("executeSplit, getOxgBalance error: %v", err)
+		return fmt.Errorf("executeSplit, getOngBalance error: %v", err)
 	}
 	//get globalParam
 	globalParam, err := getGlobalParam(native, contract)
@@ -774,9 +774,9 @@ func executeSplit(native *native.NativeService, contract common.Address, view ui
 	for i := 0; i < int(config.K); i++ {
 		nodeAmount := balance * uint64(globalParam.A) / 100 * peersCandidate[i].S / sumS
 		address := peersCandidate[i].Address
-		err = appCallTransferOxg(native, utils.GovernanceContractAddress, address, nodeAmount)
+		err = appCallTransferOng(native, utils.GovernanceContractAddress, address, nodeAmount)
 		if err != nil {
-			return fmt.Errorf("executeSplit, oxg transfer error: %v", err)
+			return fmt.Errorf("executeSplit, ong transfer error: %v", err)
 		}
 	}
 
@@ -792,9 +792,9 @@ func executeSplit(native *native.NativeService, contract common.Address, view ui
 	for i := int(config.K); i < len(peersCandidate); i++ {
 		nodeAmount := balance * uint64(globalParam.B) / 100 * peersCandidate[i].Stake / sum
 		address := peersCandidate[i].Address
-		err = appCallTransferOxg(native, utils.GovernanceContractAddress, address, nodeAmount)
+		err = appCallTransferOng(native, utils.GovernanceContractAddress, address, nodeAmount)
 		if err != nil {
-			return fmt.Errorf("executeSplit, oxg transfer error: %v", err)
+			return fmt.Errorf("executeSplit, ong transfer error: %v", err)
 		}
 	}
 
@@ -815,9 +815,9 @@ func executeSplit2(native *native.NativeService, contract common.Address, view u
 		return splitSum, fmt.Errorf("executeSplit, get peerPoolMap error: %v", err)
 	}
 
-	balance, err := getOxgBalance(native, utils.GovernanceContractAddress)
+	balance, err := getOngBalance(native, utils.GovernanceContractAddress)
 	if err != nil {
-		return splitSum, fmt.Errorf("executeSplit, getOxgBalance error: %v", err)
+		return splitSum, fmt.Errorf("executeSplit, getOngBalance error: %v", err)
 	}
 	splitFee, err := getSplitFee(native, contract)
 	if err != nil {

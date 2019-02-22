@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package main
@@ -62,10 +62,10 @@ import (
 
 func setupAPP() *cli.App {
 	app := cli.NewApp()
-	app.Usage = "OnyxChain CLI"
-	app.Action = startOnyxChain
+	app.Usage = "Ontology CLI"
+	app.Action = startOntology
 	app.Version = config.Version
-	app.Copyright = "Copyright in 2018 The OnyxChain Authors"
+	app.Copyright = "Copyright in 2018 The Ontology Authors"
 	app.Commands = []cli.Command{
 		cmd.AccountCommand,
 		cmd.InfoCommand,
@@ -138,7 +138,7 @@ func main() {
 	}
 }
 
-func startOnyxChain(ctx *cli.Context) {
+func startOntology(ctx *cli.Context) {
 	initLog(ctx)
 
 	_, err := initConfig(ctx)
@@ -197,9 +197,9 @@ func initLog(ctx *cli.Context) {
 	log.InitLog(logLevel, log.PATH, log.Stdout)
 }
 
-func initConfig(ctx *cli.Context) (*config.OnyxChainConfig, error) {
-	//init OnyxChain config from cli
-	cfg, err := cmd.SetOnyxChainConfig(ctx)
+func initConfig(ctx *cli.Context) (*config.OntologyConfig, error) {
+	//init ontology config from cli
+	cfg, err := cmd.SetOntologyConfig(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -424,7 +424,7 @@ func waitToExit() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	go func() {
 		for sig := range sc {
-			log.Infof("OnyxChain received exit signal:%v.", sig.String())
+			log.Infof("Ontology received exit signal:%v.", sig.String())
 			close(exit)
 			break
 		}

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package cmd
@@ -42,7 +42,7 @@ var (
 			{
 				Action:    deployContract,
 				Name:      "deploy",
-				Usage:     "Deploy a smart contract to OnyxChain",
+				Usage:     "Deploy a smart contract to ontology",
 				ArgsUsage: " ",
 				Flags: []cli.Flag{
 					utils.RPCPortFlag,
@@ -178,7 +178,7 @@ func deployContract(ctx *cli.Context) error {
 	PrintInfoMsg("  Contract Address:%s", address.ToHexString())
 	PrintInfoMsg("  TxHash:%s", txHash)
 	PrintInfoMsg("\nTip:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }
 
@@ -270,7 +270,7 @@ func invokeCodeContract(ctx *cli.Context) error {
 
 	PrintInfoMsg("TxHash:%s", txHash)
 	PrintInfoMsg("\nTip:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }
 
@@ -347,6 +347,6 @@ func invokeContract(ctx *cli.Context) error {
 
 	PrintInfoMsg("  TxHash:%s", txHash)
 	PrintInfoMsg("\nTips:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }

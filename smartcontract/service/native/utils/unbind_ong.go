@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package utils
@@ -27,7 +27,7 @@ var (
 
 // startOffset : start timestamp offset from genesis block
 // endOffset :  end timestamp offset from genesis block
-func CalcUnbindOxg(balance uint64, startOffset, endOffset uint32) uint64 {
+func CalcUnbindOng(balance uint64, startOffset, endOffset uint32) uint64 {
 	var amount uint64 = 0
 	if startOffset >= endOffset {
 		return 0
@@ -47,6 +47,9 @@ func CalcUnbindOxg(balance uint64, startOffset, endOffset uint32) uint64 {
 		}
 		amount += uint64(iend-istart) * GENERATION_AMOUNT[ustart]
 	}
+	if amount < constants.SUPPLY_RATIO {
+		return 0
+	}
 
-	return uint64(amount) * balance
+	return uint64(uint64(amount)*balance) / constants.SUPPLY_RATIO
 }

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 package auth
 
@@ -36,7 +36,7 @@ var (
 var (
 	funcs           = []string{"foo1", "foo2"}
 	role            = "role"
-	OnyxContractAddr = utils.OnyxContractAddress
+	OntContractAddr = utils.OntContractAddress
 )
 
 func init() {
@@ -51,7 +51,7 @@ func init() {
 }
 func TestSerialization_Init(t *testing.T) {
 	param := &InitContractAdminParam{
-		AdminOnyxID: admin,
+		AdminOntID: admin,
 	}
 	bf := new(bytes.Buffer)
 	if err := param.Serialize(bf); err != nil {
@@ -64,15 +64,15 @@ func TestSerialization_Init(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if bytes.Compare(param.AdminOnyxID, param2.AdminOnyxID) != 0 {
+	if bytes.Compare(param.AdminOntID, param2.AdminOntID) != 0 {
 		t.Fatalf("failed")
 	}
 }
 
 func TestSerialization_Transfer(t *testing.T) {
 	param := &TransferParam{
-		ContractAddr:  OnyxContractAddr,
-		NewAdminOnyxID: newAdmin,
+		ContractAddr:  OntContractAddr,
+		NewAdminOntID: newAdmin,
 	}
 	bf := new(bytes.Buffer)
 	if err := param.Serialize(bf); err != nil {
@@ -90,8 +90,8 @@ func TestSerialization_Transfer(t *testing.T) {
 
 func TestSerialization_AssignFuncs(t *testing.T) {
 	param := &FuncsToRoleParam{
-		ContractAddr: OnyxContractAddr,
-		AdminOnyxID:   admin,
+		ContractAddr: OntContractAddr,
+		AdminOntID:   admin,
 		Role:         []byte("role"),
 		FuncNames:    funcs,
 	}
@@ -109,10 +109,10 @@ func TestSerialization_AssignFuncs(t *testing.T) {
 	assert.Equal(t, param, param2)
 }
 
-func TestSerialization_AssignOnyxIDs(t *testing.T) {
-	param := &OnyxIDsToRoleParam{
-		ContractAddr: OnyxContractAddr,
-		AdminOnyxID:   admin,
+func TestSerialization_AssignOntIDs(t *testing.T) {
+	param := &OntIDsToRoleParam{
+		ContractAddr: OntContractAddr,
+		AdminOntID:   admin,
 		Role:         []byte(role),
 		Persons:      [][]byte{[]byte{0x03, 0x04, 0x05, 0x06}, []byte{0x07, 0x08, 0x09, 0x0a}},
 	}
@@ -121,7 +121,7 @@ func TestSerialization_AssignOnyxIDs(t *testing.T) {
 		t.Fatal(err)
 	}
 	rd := bytes.NewReader(bf.Bytes())
-	param2 := new(OnyxIDsToRoleParam)
+	param2 := new(OntIDsToRoleParam)
 	if err := param2.Deserialize(rd); err != nil {
 		t.Fatal(err)
 	}
@@ -131,7 +131,7 @@ func TestSerialization_AssignOnyxIDs(t *testing.T) {
 
 func TestSerialization_Delegate(t *testing.T) {
 	param := &DelegateParam{
-		ContractAddr: OnyxContractAddr,
+		ContractAddr: OntContractAddr,
 		From:         p1,
 		To:           p2,
 		Role:         []byte(role),
@@ -152,7 +152,7 @@ func TestSerialization_Delegate(t *testing.T) {
 
 func TestSerialization_Withdraw(t *testing.T) {
 	param := &WithdrawParam{
-		ContractAddr: OnyxContractAddr,
+		ContractAddr: OntContractAddr,
 		Initiator:    p1,
 		Delegate:     p2,
 		Role:         []byte(role),
@@ -171,7 +171,7 @@ func TestSerialization_Withdraw(t *testing.T) {
 
 func TestSerialization_VerifyToken(t *testing.T) {
 	param := &VerifyTokenParam{
-		ContractAddr: OnyxContractAddr,
+		ContractAddr: OntContractAddr,
 		Caller:       p1,
 		Fn:           "foo1",
 	}

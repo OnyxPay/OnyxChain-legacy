@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package auth
@@ -44,7 +44,7 @@ func Init() {
 /*
  * contract admin management
  */
-func initContractAdmin(native *native.NativeService, contractAddr common.Address, onyxID []byte) (bool, error) {
+func initContractAdmin(native *native.NativeService, contractAddr common.Address, ontID []byte) (bool, error) {
 	admin, err := getContractAdmin(native, contractAddr)
 	if err != nil {
 		return false, err
@@ -54,7 +54,7 @@ func initContractAdmin(native *native.NativeService, contractAddr common.Address
 		log.Debugf("admin of contract %s is already set", contractAddr.ToHexString())
 		return false, nil
 	}
-	err = putContractAdmin(native, contractAddr, onyxID)
+	err = putContractAdmin(native, contractAddr, ontID)
 	if err != nil {
 		return false, err
 	}
@@ -73,10 +73,10 @@ func InitContractAdmin(native *native.NativeService) ([]byte, error) {
 	}
 	invokeAddr := cxt.ContractAddress
 
-	if !account.VerifyID(string(param.AdminOnyxID)) {
-		return nil, fmt.Errorf("[initContractAdmin] invalid param: adminOnyxID is %x", param.AdminOnyxID)
+	if !account.VerifyID(string(param.AdminOntID)) {
+		return nil, fmt.Errorf("[initContractAdmin] invalid param: adminOntID is %x", param.AdminOntID)
 	}
-	ret, err := initContractAdmin(native, invokeAddr, param.AdminOnyxID)
+	ret, err := initContractAdmin(native, invokeAddr, param.AdminOntID)
 	if err != nil {
 		return nil, fmt.Errorf("[initContractAdmin] init failed: %v", err)
 	}
@@ -84,12 +84,12 @@ func InitContractAdmin(native *native.NativeService) ([]byte, error) {
 		return utils.BYTE_FALSE, nil
 	}
 
-	msg := []interface{}{"initContractAdmin", invokeAddr.ToHexString(), string(param.AdminOnyxID)}
+	msg := []interface{}{"initContractAdmin", invokeAddr.ToHexString(), string(param.AdminOntID)}
 	pushEvent(native, msg)
 	return utils.BYTE_TRUE, nil
 }
 
-func transfer(native *native.NativeService, contractAddr common.Address, newAdminOnyxID []byte, keyNo uint64) (bool, error) {
+func transfer(native *native.NativeService, contractAddr common.Address, newAdminOntID []byte, keyNo uint64) (bool, error) {
 	admin, err := getContractAdmin(native, contractAddr)
 	if err != nil {
 		return false, fmt.Errorf("getContractAdmin failed: %v", err)
@@ -109,7 +109,7 @@ func transfer(native *native.NativeService, contractAddr common.Address, newAdmi
 	}
 
 	adminKey := concatContractAdminKey(native, contractAddr)
-	utils.PutBytes(native, adminKey, newAdminOnyxID)
+	utils.PutBytes(native, adminKey, newAdminOntID)
 	return true, nil
 }
 
@@ -122,8 +122,8 @@ func Transfer(native *native.NativeService) ([]byte, error) {
 		return nil, fmt.Errorf("[transfer] deserialize param failed: %v", err)
 	}
 
-	if !account.VerifyID(string(param.NewAdminOnyxID)) {
-		return nil, fmt.Errorf("[transfer] invalid param: newAdminOnyxID is %x", param.NewAdminOnyxID)
+	if !account.VerifyID(string(param.NewAdminOntID)) {
+		return nil, fmt.Errorf("[transfer] invalid param: newAdminOntID is %x", param.NewAdminOntID)
 	}
 	//prepare event msg
 	contract := param.ContractAddr.ToHexString()
@@ -131,7 +131,7 @@ func Transfer(native *native.NativeService) ([]byte, error) {
 	sucState := []interface{}{"transfer", contract, true}
 
 	//call transfer func
-	ret, err := transfer(native, param.ContractAddr, param.NewAdminOnyxID, param.KeyNo)
+	ret, err := transfer(native, param.ContractAddr, param.NewAdminOntID, param.KeyNo)
 	if err != nil {
 		return nil, fmt.Errorf("[transfer] transfer failed: %v", err)
 	}
@@ -170,18 +170,18 @@ func AssignFuncsToRole(native *native.NativeService) ([]byte, error) {
 		return nil, fmt.Errorf("[assignFuncsToRole] admin of contract %s has not been set",
 			param.ContractAddr.ToHexString())
 	}
-	if bytes.Compare(admin, param.AdminOnyxID) != 0 {
-		log.Debugf("[assignFuncsToRole] invalid param: adminOnyxID doesn't match %s != %s",
-			string(param.AdminOnyxID), string(admin))
+	if bytes.Compare(admin, param.AdminOntID) != 0 {
+		log.Debugf("[assignFuncsToRole] invalid param: adminOntID doesn't match %s != %s",
+			string(param.AdminOntID), string(admin))
 		pushEvent(native, failState)
 		return utils.BYTE_FALSE, nil
 	}
-	ret, err := verifySig(native, param.AdminOnyxID, param.KeyNo)
+	ret, err := verifySig(native, param.AdminOntID, param.KeyNo)
 	if err != nil {
 		return nil, fmt.Errorf("[assignFuncsToRole] verify admin's signature failed: %v", err)
 	}
 	if !ret {
-		log.Debugf("[assignFuncsToRole] verifySig return false: adminOnyxID=%s, keyNo=%d",
+		log.Debugf("[assignFuncsToRole] verifySig return false: adminOntID=%s, keyNo=%d",
 			string(admin), param.KeyNo)
 		pushEvent(native, failState)
 		return utils.BYTE_FALSE, nil
@@ -207,7 +207,7 @@ func AssignFuncsToRole(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-func assignToRole(native *native.NativeService, param *OnyxIDsToRoleParam) (bool, error) {
+func assignToRole(native *native.NativeService, param *OntIDsToRoleParam) (bool, error) {
 	//check admin's permission
 	admin, err := getContractAdmin(native, param.ContractAddr)
 	if err != nil {
@@ -216,17 +216,17 @@ func assignToRole(native *native.NativeService, param *OnyxIDsToRoleParam) (bool
 	if admin == nil {
 		return false, fmt.Errorf("admin of contract %s is not set", param.ContractAddr.ToHexString())
 	}
-	if bytes.Compare(admin, param.AdminOnyxID) != 0 {
-		log.Debugf("param's adminOnyxID doesn't match: %s != %s", string(param.AdminOnyxID),
+	if bytes.Compare(admin, param.AdminOntID) != 0 {
+		log.Debugf("param's adminOntID doesn't match: %s != %s", string(param.AdminOntID),
 			string(admin))
 		return false, nil
 	}
-	valid, err := verifySig(native, param.AdminOnyxID, param.KeyNo)
+	valid, err := verifySig(native, param.AdminOntID, param.KeyNo)
 	if err != nil {
 		return false, fmt.Errorf("verify admin's signature failed: %v", err)
 	}
 	if !valid {
-		log.Debugf("[assignOnyxIDsToRole] verifySig return false: adminOnyxID=%s, keyNo=%d",
+		log.Debugf("[assignOntIDsToRole] verifySig return false: adminOntID=%s, keyNo=%d",
 			string(admin), param.KeyNo)
 		return false, nil
 	}
@@ -241,9 +241,9 @@ func assignToRole(native *native.NativeService, param *OnyxIDsToRoleParam) (bool
 		if p == nil {
 			continue
 		}
-		tokens, err := getOnyxIDToken(native, param.ContractAddr, p)
+		tokens, err := getOntIDToken(native, param.ContractAddr, p)
 		if err != nil {
-			return false, fmt.Errorf("getOnyxIDToken failed: %v", err)
+			return false, fmt.Errorf("getOntIDToken failed: %v", err)
 		}
 		if tokens == nil {
 			tokens = new(roleTokens)
@@ -261,7 +261,7 @@ func assignToRole(native *native.NativeService, param *OnyxIDsToRoleParam) (bool
 				continue
 			}
 		}
-		err = putOnyxIDToken(native, param.ContractAddr, p, tokens)
+		err = putOntIDToken(native, param.ContractAddr, p, tokens)
 		if err != nil {
 			return false, err
 		}
@@ -269,32 +269,32 @@ func assignToRole(native *native.NativeService, param *OnyxIDsToRoleParam) (bool
 	return true, nil
 }
 
-func AssignOnyxIDsToRole(native *native.NativeService) ([]byte, error) {
+func AssignOntIDsToRole(native *native.NativeService) ([]byte, error) {
 	//deserialize param
-	param := new(OnyxIDsToRoleParam)
+	param := new(OntIDsToRoleParam)
 	rd := bytes.NewReader(native.Input)
 	if err := param.Deserialize(rd); err != nil {
-		return nil, fmt.Errorf("[assignOnyxIDsToRole] deserialize param failed: %v", err)
+		return nil, fmt.Errorf("[assignOntIDsToRole] deserialize param failed: %v", err)
 	}
 
 	if param.Role == nil {
-		return nil, fmt.Errorf("[assignOnyxIDsToRole] invalid param: role is nil")
+		return nil, fmt.Errorf("[assignOntIDsToRole] invalid param: role is nil")
 	}
-	for i, onyxID := range param.Persons {
-		if !account.VerifyID(string(onyxID)) {
-			return nil, fmt.Errorf("[assignOnyxIDsToRole] invalid param: param.Persons[%d]=%s",
-				i, string(onyxID))
+	for i, ontID := range param.Persons {
+		if !account.VerifyID(string(ontID)) {
+			return nil, fmt.Errorf("[assignOntIDsToRole] invalid param: param.Persons[%d]=%s",
+				i, string(ontID))
 		}
 	}
 
 	ret, err := assignToRole(native, param)
 	if err != nil {
-		return nil, fmt.Errorf("[assignOnyxIDsToRole] failed: %v", err)
+		return nil, fmt.Errorf("[assignOntIDsToRole] failed: %v", err)
 	}
 
 	contract := param.ContractAddr.ToHexString()
-	failState := []interface{}{"assignOnyxIDsToRole", contract, false}
-	sucState := []interface{}{"assignOnyxIDsToRole", contract, true}
+	failState := []interface{}{"assignOntIDsToRole", contract, false}
+	sucState := []interface{}{"assignOntIDsToRole", contract, true}
 	if ret {
 		pushEvent(native, sucState)
 		return utils.BYTE_TRUE, nil
@@ -304,8 +304,8 @@ func AssignOnyxIDsToRole(native *native.NativeService) ([]byte, error) {
 	}
 }
 
-func getAuthToken(native *native.NativeService, contractAddr common.Address, onyxID, role []byte) (*AuthToken, error) {
-	tokens, err := getOnyxIDToken(native, contractAddr, onyxID)
+func getAuthToken(native *native.NativeService, contractAddr common.Address, ontID, role []byte) (*AuthToken, error) {
+	tokens, err := getOntIDToken(native, contractAddr, ontID)
 	if err != nil {
 		return nil, fmt.Errorf("get token failed, caused by %v", err)
 	}
@@ -316,7 +316,7 @@ func getAuthToken(native *native.NativeService, contractAddr common.Address, ony
 			}
 		}
 	}
-	status, err := getDelegateStatus(native, contractAddr, onyxID)
+	status, err := getDelegateStatus(native, contractAddr, ontID)
 	if err != nil {
 		return nil, fmt.Errorf("get delegate status failed, caused by %v", err)
 	}
@@ -334,8 +334,8 @@ func getAuthToken(native *native.NativeService, contractAddr common.Address, ony
 	return nil, nil
 }
 
-func hasRole(native *native.NativeService, contractAddr common.Address, onyxID, role []byte) (bool, error) {
-	token, err := getAuthToken(native, contractAddr, onyxID, role)
+func hasRole(native *native.NativeService, contractAddr common.Address, ontID, role []byte) (bool, error) {
+	token, err := getAuthToken(native, contractAddr, ontID, role)
 	if err != nil {
 		return false, err
 	}
@@ -345,8 +345,8 @@ func hasRole(native *native.NativeService, contractAddr common.Address, onyxID, 
 	return true, nil
 }
 
-func getLevel(native *native.NativeService, contractAddr common.Address, onyxID, role []byte) (uint8, error) {
-	token, err := getAuthToken(native, contractAddr, onyxID, role)
+func getLevel(native *native.NativeService, contractAddr common.Address, ontID, role []byte) (uint8, error) {
+	token, err := getAuthToken(native, contractAddr, ontID, role)
 	if err != nil {
 		return 0, err
 	}
@@ -385,7 +385,7 @@ func delegate(native *native.NativeService, contractAddr common.Address, from []
 	}
 
 	if !account.VerifyID(string(to)) {
-		return false, fmt.Errorf("can not pass OnyxID validity test: to=%s", string(to))
+		return false, fmt.Errorf("can not pass OntID validity test: to=%s", string(to))
 	}
 
 	//get from's auth token
@@ -576,9 +576,9 @@ func verifyToken(native *native.NativeService, contractAddr common.Address, call
 	}
 
 	//check if caller has the permanent auth token
-	tokens, err := getOnyxIDToken(native, contractAddr, caller)
+	tokens, err := getOntIDToken(native, contractAddr, caller)
 	if err != nil {
-		return false, fmt.Errorf("getOnyxIDToken failed: %v", err)
+		return false, fmt.Errorf("getOntIDToken failed: %v", err)
 	}
 	if tokens != nil {
 		for _, token := range tokens.tokens {
@@ -645,16 +645,16 @@ func VerifyToken(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_FALSE, nil
 }
 
-func verifySig(native *native.NativeService, onyxID []byte, keyNo uint64) (bool, error) {
+func verifySig(native *native.NativeService, ontID []byte, keyNo uint64) (bool, error) {
 	bf := new(bytes.Buffer)
-	if err := serialization.WriteVarBytes(bf, onyxID); err != nil {
+	if err := serialization.WriteVarBytes(bf, ontID); err != nil {
 		return false, err
 	}
 	if err := utils.WriteVarUint(bf, keyNo); err != nil {
 		return false, err
 	}
 	args := bf.Bytes()
-	ret, err := native.NativeCall(utils.OnyxIDContractAddress, "verifySignature", args)
+	ret, err := native.NativeCall(utils.OntIDContractAddress, "verifySignature", args)
 	if err != nil {
 		return false, err
 	}
@@ -674,7 +674,7 @@ func RegisterAuthContract(native *native.NativeService) {
 	native.Register("assignFuncsToRole", AssignFuncsToRole)
 	native.Register("delegate", Delegate)
 	native.Register("withdraw", Withdraw)
-	native.Register("assignOnyxIDsToRole", AssignOnyxIDsToRole)
+	native.Register("assignOntIDsToRole", AssignOntIDsToRole)
 	native.Register("verifyToken", VerifyToken)
 	native.Register("transfer", Transfer)
 }

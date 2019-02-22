@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package account
@@ -34,7 +34,7 @@ import (
 
 const (
 	SCHEME = "did"
-	METHOD = "onyx"
+	METHOD = "ont"
 	VER    = 0x41
 )
 
@@ -66,13 +66,13 @@ func CreateID(nonce []byte) (string, error) {
 }
 
 func VerifyID(id string) bool {
-	if len(id) < 10 {
+	if len(id) < 9 {
 		return false
 	}
-	if id[0:9] != "did:onyx:" {
+	if id[0:8] != "did:ont:" {
 		return false
 	}
-	buf, err := base58.BitcoinEncoding.Decode([]byte(id[9:]))
+	buf, err := base58.BitcoinEncoding.Decode([]byte(id[8:]))
 	if err != nil {
 		return false
 	}
@@ -102,7 +102,7 @@ func checksum(data []byte) []byte {
 }
 
 type Identity struct {
-	ID      string       `json:"onyxid"`
+	ID      string       `json:"ontid"`
 	Label   string       `json:"label,omitempty"`
 	Lock    bool         `json:"lock"`
 	Control []Controller `json:"controls,omitempty"`

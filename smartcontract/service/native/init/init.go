@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package init
@@ -26,9 +26,9 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/auth"
 	params "github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/global_params"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/governance"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/oxg"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onyx"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onyxid"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ong"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ontid"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/utils"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/neovm"
 	vm "github.com/OnyxPay/OnyxChain-legacy/vm/neovm"
@@ -39,10 +39,10 @@ var (
 )
 
 func init() {
-	oxg.InitOxg()
-	onyx.InitOnyx()
+	ong.InitOng()
+	ont.InitOnt()
 	params.InitGlobalParams()
-	onyxid.Init()
+	ontid.Init()
 	auth.Init()
 	governance.InitGovernance()
 }

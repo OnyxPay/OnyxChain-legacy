@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package utils
@@ -33,26 +33,26 @@ const JSON_RPC_VERSION = "2.0"
 
 const (
 	ERROR_INVALID_PARAMS   = rpcerr.INVALID_PARAMS
-	ERROR_ONYXCHAIN_COMMON  = 10000
-	ERROR_ONYXCHAIN_SUCCESS = 0
+	ERROR_ONTOLOGY_COMMON  = 10000
+	ERROR_ONTOLOGY_SUCCESS = 0
 )
 
-type OnyxChainError struct {
+type OntologyError struct {
 	ErrorCode int64
 	Error     error
 }
 
-func NewOnyxChainError(err error, errCode ...int64) *OnyxChainError {
-	onyxErr := &OnyxChainError{Error: err}
+func NewOntologyError(err error, errCode ...int64) *OntologyError {
+	ontErr := &OntologyError{Error: err}
 	if len(errCode) > 0 {
-		onyxErr.ErrorCode = errCode[0]
+		ontErr.ErrorCode = errCode[0]
 	} else {
-		onyxErr.ErrorCode = ERROR_ONYXCHAIN_COMMON
+		ontErr.ErrorCode = ERROR_ONTOLOGY_COMMON
 	}
 	if err == nil {
-		onyxErr.ErrorCode = ERROR_ONYXCHAIN_SUCCESS
+		ontErr.ErrorCode = ERROR_ONTOLOGY_SUCCESS
 	}
-	return onyxErr
+	return ontErr
 }
 
 //JsonRpcRequest object in rpc
@@ -70,7 +70,7 @@ type JsonRpcResponse struct {
 	Result json.RawMessage `json:"result"`
 }
 
-func sendRpcRequest(method string, params []interface{}) ([]byte, *OnyxChainError) {
+func sendRpcRequest(method string, params []interface{}) ([]byte, *OntologyError) {
 	rpcReq := &JsonRpcRequest{
 		Version: JSON_RPC_VERSION,
 		Id:      "cli",
@@ -79,27 +79,27 @@ func sendRpcRequest(method string, params []interface{}) ([]byte, *OnyxChainErro
 	}
 	data, err := json.Marshal(rpcReq)
 	if err != nil {
-		return nil, NewOnyxChainError(fmt.Errorf("JsonRpcRequest json.Marshal error:%s", err))
+		return nil, NewOntologyError(fmt.Errorf("JsonRpcRequest json.Marshal error:%s", err))
 	}
 
 	addr := fmt.Sprintf("http://localhost:%d", config.DefConfig.Rpc.HttpJsonPort)
 	resp, err := http.Post(addr, "application/json", strings.NewReader(string(data)))
 	if err != nil {
-		return nil, NewOnyxChainError(err)
+		return nil, NewOntologyError(err)
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, NewOnyxChainError(fmt.Errorf("read rpc response body error:%s", err))
+		return nil, NewOntologyError(fmt.Errorf("read rpc response body error:%s", err))
 	}
 	rpcRsp := &JsonRpcResponse{}
 	err = json.Unmarshal(body, rpcRsp)
 	if err != nil {
-		return nil, NewOnyxChainError(fmt.Errorf("json.Unmarshal JsonRpcResponse:%s error:%s", body, err))
+		return nil, NewOntologyError(fmt.Errorf("json.Unmarshal JsonRpcResponse:%s error:%s", body, err))
 	}
 	if rpcRsp.Error != 0 {
-		return nil, NewOnyxChainError(fmt.Errorf("%s", strings.ToLower(rpcRsp.Desc)), rpcRsp.Error)
+		return nil, NewOntologyError(fmt.Errorf("%s", strings.ToLower(rpcRsp.Desc)), rpcRsp.Error)
 	}
 	return rpcRsp.Result, nil
 }

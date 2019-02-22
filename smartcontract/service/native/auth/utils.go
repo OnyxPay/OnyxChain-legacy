@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package auth
@@ -58,9 +58,9 @@ func getContractAdmin(native *native.NativeService, contractAddr common.Address)
 	return item.Value, nil
 }
 
-func putContractAdmin(native *native.NativeService, contractAddr common.Address, adminOnyxID []byte) error {
+func putContractAdmin(native *native.NativeService, contractAddr common.Address, adminOntID []byte) error {
 	key := concatContractAdminKey(native, contractAddr)
-	utils.PutBytes(native, key, adminOnyxID)
+	utils.PutBytes(native, key, adminOntID)
 	return nil
 }
 
@@ -103,18 +103,18 @@ func putRoleFunc(native *native.NativeService, contractAddr common.Address, role
 	return nil
 }
 
-//type(this.contractAddr.RoleP.onyxID) = roleTokens
-func concatOnyxIDTokenKey(native *native.NativeService, contractAddr common.Address, onyxID []byte) []byte {
+//type(this.contractAddr.RoleP.ontID) = roleTokens
+func concatOntIDTokenKey(native *native.NativeService, contractAddr common.Address, ontID []byte) []byte {
 	this := native.ContextRef.CurrentContext().ContractAddress
 	tokenKey := append(this[:], contractAddr[:]...)
 	tokenKey = append(tokenKey, PreRoleToken...)
-	tokenKey = append(tokenKey, onyxID...)
+	tokenKey = append(tokenKey, ontID...)
 
 	return tokenKey
 }
 
-func getOnyxIDToken(native *native.NativeService, contractAddr common.Address, onyxID []byte) (*roleTokens, error) {
-	key := concatOnyxIDTokenKey(native, contractAddr, onyxID)
+func getOntIDToken(native *native.NativeService, contractAddr common.Address, ontID []byte) (*roleTokens, error) {
+	key := concatOntIDTokenKey(native, contractAddr, ontID)
 	item, err := utils.GetStorageItem(native, key)
 	if err != nil {
 		return nil, err
@@ -131,8 +131,8 @@ func getOnyxIDToken(native *native.NativeService, contractAddr common.Address, o
 	return rT, nil
 }
 
-func putOnyxIDToken(native *native.NativeService, contractAddr common.Address, onyxID []byte, tokens *roleTokens) error {
-	key := concatOnyxIDTokenKey(native, contractAddr, onyxID)
+func putOntIDToken(native *native.NativeService, contractAddr common.Address, ontID []byte, tokens *roleTokens) error {
+	key := concatOntIDTokenKey(native, contractAddr, ontID)
 	bf := new(bytes.Buffer)
 	err := tokens.Serialize(bf)
 	if err != nil {
@@ -142,18 +142,18 @@ func putOnyxIDToken(native *native.NativeService, contractAddr common.Address, o
 	return nil
 }
 
-//type(this.contractAddr.DelegateStatus.onyxID)
-func concatDelegateStatusKey(native *native.NativeService, contractAddr common.Address, onyxID []byte) []byte {
+//type(this.contractAddr.DelegateStatus.ontID)
+func concatDelegateStatusKey(native *native.NativeService, contractAddr common.Address, ontID []byte) []byte {
 	this := native.ContextRef.CurrentContext().ContractAddress
 	key := append(this[:], contractAddr[:]...)
 	key = append(key, PreDelegateStatus...)
-	key = append(key, onyxID...)
+	key = append(key, ontID...)
 
 	return key
 }
 
-func getDelegateStatus(native *native.NativeService, contractAddr common.Address, onyxID []byte) (*Status, error) {
-	key := concatDelegateStatusKey(native, contractAddr, onyxID)
+func getDelegateStatus(native *native.NativeService, contractAddr common.Address, ontID []byte) (*Status, error) {
+	key := concatDelegateStatusKey(native, contractAddr, ontID)
 	item, err := utils.GetStorageItem(native, key)
 	if err != nil {
 		return nil, err
@@ -170,8 +170,8 @@ func getDelegateStatus(native *native.NativeService, contractAddr common.Address
 	return status, nil
 }
 
-func putDelegateStatus(native *native.NativeService, contractAddr common.Address, onyxID []byte, status *Status) error {
-	key := concatDelegateStatusKey(native, contractAddr, onyxID)
+func putDelegateStatus(native *native.NativeService, contractAddr common.Address, ontID []byte, status *Status) error {
+	key := concatDelegateStatusKey(native, contractAddr, ontID)
 	bf := new(bytes.Buffer)
 	err := status.Serialize(bf)
 	if err != nil {

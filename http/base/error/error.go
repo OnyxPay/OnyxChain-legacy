@@ -1,25 +1,25 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Package error privides error code for http
 package error
 
-import onyxErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
+import ontErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
 
 const (
 	SUCCESS            int64 = 0
@@ -67,19 +67,19 @@ var ErrMap = map[int64]string{
 	INTERNAL_ERROR:                           "INTERNAL ERROR",
 	SMARTCODE_ERROR:                          "SMARTCODE EXEC ERROR",
 	PRE_EXEC_ERROR:                           "SMARTCODE PREPARE EXEC ERROR",
-	int64(onyxErrors.ErrNoCode):               "INTERNAL ERROR, ErrNoCode",
-	int64(onyxErrors.ErrUnknown):              "INTERNAL ERROR, ErrUnknown",
-	int64(onyxErrors.ErrDuplicatedTx):         "INTERNAL ERROR, ErrDuplicatedTx",
-	int64(onyxErrors.ErrDuplicateInput):       "INTERNAL ERROR, ErrDuplicateInput",
-	int64(onyxErrors.ErrAssetPrecision):       "INTERNAL ERROR, ErrAssetPrecision",
-	int64(onyxErrors.ErrTransactionBalance):   "INTERNAL ERROR, ErrTransactionBalance",
-	int64(onyxErrors.ErrAttributeProgram):     "INTERNAL ERROR, ErrAttributeProgram",
-	int64(onyxErrors.ErrTransactionContracts): "INTERNAL ERROR, ErrTransactionContracts",
-	int64(onyxErrors.ErrTransactionPayload):   "INTERNAL ERROR, ErrTransactionPayload",
-	int64(onyxErrors.ErrDoubleSpend):          "INTERNAL ERROR, ErrDoubleSpend",
-	int64(onyxErrors.ErrTxHashDuplicate):      "INTERNAL ERROR, ErrTxHashDuplicate",
-	int64(onyxErrors.ErrStateUpdaterVaild):    "INTERNAL ERROR, ErrStateUpdaterVaild",
-	int64(onyxErrors.ErrSummaryAsset):         "INTERNAL ERROR, ErrSummaryAsset",
-	int64(onyxErrors.ErrXmitFail):             "INTERNAL ERROR, ErrXmitFail",
-	int64(onyxErrors.ErrNoAccount):            "INTERNAL ERROR, ErrNoAccount",
+	int64(ontErrors.ErrNoCode):               "INTERNAL ERROR, ErrNoCode",
+	int64(ontErrors.ErrUnknown):              "INTERNAL ERROR, ErrUnknown",
+	int64(ontErrors.ErrDuplicatedTx):         "INTERNAL ERROR, ErrDuplicatedTx",
+	int64(ontErrors.ErrDuplicateInput):       "INTERNAL ERROR, ErrDuplicateInput",
+	int64(ontErrors.ErrAssetPrecision):       "INTERNAL ERROR, ErrAssetPrecision",
+	int64(ontErrors.ErrTransactionBalance):   "INTERNAL ERROR, ErrTransactionBalance",
+	int64(ontErrors.ErrAttributeProgram):     "INTERNAL ERROR, ErrAttributeProgram",
+	int64(ontErrors.ErrTransactionContracts): "INTERNAL ERROR, ErrTransactionContracts",
+	int64(ontErrors.ErrTransactionPayload):   "INTERNAL ERROR, ErrTransactionPayload",
+	int64(ontErrors.ErrDoubleSpend):          "INTERNAL ERROR, ErrDoubleSpend",
+	int64(ontErrors.ErrTxHashDuplicate):      "INTERNAL ERROR, ErrTxHashDuplicate",
+	int64(ontErrors.ErrStateUpdaterVaild):    "INTERNAL ERROR, ErrStateUpdaterVaild",
+	int64(ontErrors.ErrSummaryAsset):         "INTERNAL ERROR, ErrSummaryAsset",
+	int64(ontErrors.ErrXmitFail):             "INTERNAL ERROR, ErrXmitFail",
+	int64(ontErrors.ErrNoAccount):            "INTERNAL ERROR, ErrNoAccount",
 }

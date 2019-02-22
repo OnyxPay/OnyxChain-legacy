@@ -1,0 +1,3 @@
+[submodule "vendor/github.com/OnyxPay/OnyxChain-crypto"]
+	path = vendor/github.com/OnyxPay/OnyxChain-crypto
+	url = https://github.com/OnyxPay/OnyxChain-crypto

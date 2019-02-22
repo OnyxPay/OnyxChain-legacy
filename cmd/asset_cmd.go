@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package cmd
@@ -33,14 +33,14 @@ import (
 var AssetCommand = cli.Command{
 	Name:        "asset",
 	Usage:       "Handle assets",
-	Description: "Asset management commands can check account balance, ONYX/oxg transfers, extract ONGs, and view unbound ONGs, and so on.",
+	Description: "Asset management commands can check account balance, ONT/ONG transfers, extract ONGs, and view unbound ONGs, and so on.",
 	Subcommands: []cli.Command{
 		{
 			Action:      transfer,
 			Name:        "transfer",
-			Usage:       "Transfer onyx or oxg to another account",
+			Usage:       "Transfer ont or ong to another account",
 			ArgsUsage:   " ",
-			Description: "Transfer onyx or oxg to another account. If from address does not specified, using default account",
+			Description: "Transfer ont or ong to another account. If from address does not specified, using default account",
 			Flags: []cli.Flag{
 				utils.RPCPortFlag,
 				utils.TransactionGasPriceFlag,
@@ -90,7 +90,7 @@ var AssetCommand = cli.Command{
 		{
 			Action:    getBalance,
 			Name:      "balance",
-			Usage:     "Show balance of onyx and oxg of specified account",
+			Usage:     "Show balance of ont and ong of specified account",
 			ArgsUsage: "<address|label|index>",
 			Flags: []cli.Flag{
 				utils.RPCPortFlag,
@@ -100,7 +100,7 @@ var AssetCommand = cli.Command{
 		{
 			Action: getAllowance,
 			Name:   "allowance",
-			Usage:  "Show approve balance of onyx or oxg of specified account",
+			Usage:  "Show approve balance of ont or ong of specified account",
 			Flags: []cli.Flag{
 				utils.RPCPortFlag,
 				utils.ApproveAssetFlag,
@@ -110,9 +110,9 @@ var AssetCommand = cli.Command{
 			},
 		},
 		{
-			Action:    unboundOxg,
-			Name:      "unboundoxg",
-			Usage:     "Show the balance of unbound oxg",
+			Action:    unboundOng,
+			Name:      "unboundong",
+			Usage:     "Show the balance of unbound ONG",
 			ArgsUsage: "<address|label|index>",
 			Flags: []cli.Flag{
 				utils.RPCPortFlag,
@@ -120,9 +120,9 @@ var AssetCommand = cli.Command{
 			},
 		},
 		{
-			Action:    withdrawOxg,
-			Name:      "withdrawoxg",
-			Usage:     "Withdraw oxg",
+			Action:    withdrawOng,
+			Name:      "withdrawong",
+			Usage:     "Withdraw ONG",
 			ArgsUsage: "<address|label|index>",
 			Flags: []cli.Flag{
 				utils.RPCPortFlag,
@@ -162,12 +162,12 @@ func transfer(ctx *cli.Context) error {
 	var amount uint64
 	amountStr := ctx.String(utils.TransactionAmountFlag.Name)
 	switch strings.ToLower(asset) {
-	case "onyx":
-		amount = utils.ParseOnyx(amountStr)
-		amountStr = utils.FormatOnyx(amount)
-	case "oxg":
-		amount = utils.ParseOxg(amountStr)
-		amountStr = utils.FormatOxg(amount)
+	case "ont":
+		amount = utils.ParseOnt(amountStr)
+		amountStr = utils.FormatOnt(amount)
+	case "ong":
+		amount = utils.ParseOng(amountStr)
+		amountStr = utils.FormatOng(amount)
 	default:
 		return fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -217,7 +217,7 @@ func transfer(ctx *cli.Context) error {
 	PrintInfoMsg("  Amount:%s", amountStr)
 	PrintInfoMsg("  TxHash:%s", txHash)
 	PrintInfoMsg("\nTip:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }
 
@@ -239,13 +239,13 @@ func getBalance(ctx *cli.Context) error {
 		return err
 	}
 
-	oxg, err := strconv.ParseUint(balance.Oxg, 10, 64)
+	ong, err := strconv.ParseUint(balance.Ong, 10, 64)
 	if err != nil {
 		return err
 	}
 	PrintInfoMsg("BalanceOf:%s", accAddr)
-	PrintInfoMsg("  ONYX:%s", balance.Onyx)
-	PrintInfoMsg("  oxg:%s", utils.FormatOxg(oxg))
+	PrintInfoMsg("  ONT:%s", balance.Ont)
+	PrintInfoMsg("  ONG:%s", utils.FormatOng(ong))
 	return nil
 }
 
@@ -275,13 +275,13 @@ func getAllowance(ctx *cli.Context) error {
 		return err
 	}
 	switch strings.ToLower(asset) {
-	case "onyx":
-	case "oxg":
+	case "ont":
+	case "ong":
 		balance, err := strconv.ParseUint(balanceStr, 10, 64)
 		if err != nil {
 			return err
 		}
-		balanceStr = utils.FormatOxg(balance)
+		balanceStr = utils.FormatOng(balance)
 	default:
 		return fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -316,12 +316,12 @@ func approve(ctx *cli.Context) error {
 	}
 	var amount uint64
 	switch strings.ToLower(asset) {
-	case "onyx":
-		amount = utils.ParseOnyx(amountStr)
-		amountStr = utils.FormatOnyx(amount)
-	case "oxg":
-		amount = utils.ParseOxg(amountStr)
-		amountStr = utils.FormatOxg(amount)
+	case "ont":
+		amount = utils.ParseOnt(amountStr)
+		amountStr = utils.FormatOnt(amount)
+	case "ong":
+		amount = utils.ParseOng(amountStr)
+		amountStr = utils.FormatOng(amount)
 	default:
 		return fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -359,7 +359,7 @@ func approve(ctx *cli.Context) error {
 	PrintInfoMsg("  Amount:%s", amountStr)
 	PrintInfoMsg("  TxHash:%s", txHash)
 	PrintInfoMsg("\nTip:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }
 
@@ -405,12 +405,12 @@ func transferFrom(ctx *cli.Context) error {
 
 	var amount uint64
 	switch strings.ToLower(asset) {
-	case "onyx":
-		amount = utils.ParseOnyx(amountStr)
-		amountStr = utils.FormatOnyx(amount)
-	case "oxg":
-		amount = utils.ParseOxg(amountStr)
-		amountStr = utils.FormatOxg(amount)
+	case "ont":
+		amount = utils.ParseOnt(amountStr)
+		amountStr = utils.FormatOnt(amount)
+	case "ong":
+		amount = utils.ParseOng(amountStr)
+		amountStr = utils.FormatOng(amount)
 	default:
 		return fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -457,11 +457,11 @@ func transferFrom(ctx *cli.Context) error {
 	PrintInfoMsg("  Amount:%s", amountStr)
 	PrintInfoMsg("  TxHash:%s", txHash)
 	PrintInfoMsg("\nTip:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }
 
-func unboundOxg(ctx *cli.Context) error {
+func unboundOng(ctx *cli.Context) error {
 	SetRpcPort(ctx)
 	if ctx.NArg() < 1 {
 		PrintErrorMsg("Missing account argument.")
@@ -473,8 +473,8 @@ func unboundOxg(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	fromAddr := nutils.OnyxContractAddress.ToBase58()
-	balanceStr, err := utils.GetAllowance("oxg", fromAddr, accAddr)
+	fromAddr := nutils.OntContractAddress.ToBase58()
+	balanceStr, err := utils.GetAllowance("ong", fromAddr, accAddr)
 	if err != nil {
 		return err
 	}
@@ -482,14 +482,14 @@ func unboundOxg(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	balanceStr = utils.FormatOxg(balance)
-	PrintInfoMsg("Unbound oxg:")
+	balanceStr = utils.FormatOng(balance)
+	PrintInfoMsg("Unbound ONG:")
 	PrintInfoMsg("  Account:%s", accAddr)
-	PrintInfoMsg("  oxg:%s", balanceStr)
+	PrintInfoMsg("  ONG:%s", balanceStr)
 	return nil
 }
 
-func withdrawOxg(ctx *cli.Context) error {
+func withdrawOng(ctx *cli.Context) error {
 	SetRpcPort(ctx)
 	if ctx.NArg() < 1 {
 		PrintErrorMsg("Missing account argument.")
@@ -501,8 +501,8 @@ func withdrawOxg(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	fromAddr := nutils.OnyxContractAddress.ToBase58()
-	balance, err := utils.GetAllowance("oxg", fromAddr, accAddr)
+	fromAddr := nutils.OntContractAddress.ToBase58()
+	balance, err := utils.GetAllowance("ong", fromAddr, accAddr)
 	if err != nil {
 		return err
 	}
@@ -512,7 +512,7 @@ func withdrawOxg(ctx *cli.Context) error {
 		return err
 	}
 	if amount <= 0 {
-		return fmt.Errorf("haven't unbound oxg\n")
+		return fmt.Errorf("haven't unbound ong\n")
 	}
 
 	var signer *account.Account
@@ -531,16 +531,16 @@ func withdrawOxg(ctx *cli.Context) error {
 		gasPrice = 0
 	}
 
-	txHash, err := utils.TransferFrom(gasPrice, gasLimit, signer, "oxg", accAddr, fromAddr, accAddr, amount)
+	txHash, err := utils.TransferFrom(gasPrice, gasLimit, signer, "ong", accAddr, fromAddr, accAddr, amount)
 	if err != nil {
 		return err
 	}
 
-	PrintInfoMsg("Withdraw oxg:")
+	PrintInfoMsg("Withdraw ONG:")
 	PrintInfoMsg("  Account:%s", accAddr)
-	PrintInfoMsg("  Amount:%s", utils.FormatOxg(amount))
+	PrintInfoMsg("  Amount:%s", utils.FormatOng(amount))
 	PrintInfoMsg("  TxHash:%s", txHash)
 	PrintInfoMsg("\nTip:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }

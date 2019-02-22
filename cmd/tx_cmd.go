@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 package cmd
 
@@ -31,8 +31,8 @@ import (
 
 var SendTxCommand = cli.Command{
 	Name:        "sendtx",
-	Usage:       "Send raw transaction to OnyxChain",
-	Description: "Send raw transaction to OnyxChain.",
+	Usage:       "Send raw transaction to Ontology",
+	Description: "Send raw transaction to Ontology.",
 	ArgsUsage:   "<rawtx>",
 	Action:      sendTx,
 	Flags: []cli.Flag{
@@ -71,7 +71,7 @@ func sendTx(ctx *cli.Context) error {
 	PrintInfoMsg("Send transaction success.")
 	PrintInfoMsg("  TxHash:%s", txHash)
 	PrintInfoMsg("\nTip:")
-	PrintInfoMsg("  Using './OnyxChain info status %s' to query transaction status.", txHash)
+	PrintInfoMsg("  Using './ontology info status %s' to query transaction status.", txHash)
 	return nil
 }
 
@@ -141,9 +141,9 @@ var TransferFromTxCommond = cli.Command{
 
 var WithdrawONGTxCommond = cli.Command{
 	Action:      withdrawONGTx,
-	Name:        "withdrawoxg",
-	Usage:       "Build Withdraw oxg transaction",
-	Description: "Build Withdraw oxg transaction",
+	Name:        "withdrawong",
+	Usage:       "Build Withdraw ONG transaction",
+	Description: "Build Withdraw ONG transaction",
 	ArgsUsage:   "<address|label|index>",
 	Flags: []cli.Flag{
 		utils.RPCPortFlag,
@@ -202,12 +202,12 @@ func transferTx(ctx *cli.Context) error {
 	var amount uint64
 	amountStr := ctx.String(utils.TransactionAmountFlag.Name)
 	switch strings.ToLower(asset) {
-	case "onyx":
-		amount = utils.ParseOnyx(amountStr)
-		amountStr = utils.FormatOnyx(amount)
-	case "oxg":
-		amount = utils.ParseOxg(amountStr)
-		amountStr = utils.FormatOxg(amount)
+	case "ont":
+		amount = utils.ParseOnt(amountStr)
+		amountStr = utils.FormatOnt(amount)
+	case "ong":
+		amount = utils.ParseOng(amountStr)
+		amountStr = utils.FormatOng(amount)
 	default:
 		return fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -277,12 +277,12 @@ func approveTx(ctx *cli.Context) error {
 
 	var amount uint64
 	switch strings.ToLower(asset) {
-	case "onyx":
-		amount = utils.ParseOnyx(amountStr)
-		amountStr = utils.FormatOnyx(amount)
-	case "oxg":
-		amount = utils.ParseOxg(amountStr)
-		amountStr = utils.FormatOxg(amount)
+	case "ont":
+		amount = utils.ParseOnt(amountStr)
+		amountStr = utils.FormatOnt(amount)
+	case "ong":
+		amount = utils.ParseOng(amountStr)
+		amountStr = utils.FormatOng(amount)
 	default:
 		return fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -366,12 +366,12 @@ func transferFromTx(ctx *cli.Context) error {
 
 	var amount uint64
 	switch strings.ToLower(asset) {
-	case "onyx":
-		amount = utils.ParseOnyx(amountStr)
-		amountStr = utils.FormatOnyx(amount)
-	case "oxg":
-		amount = utils.ParseOxg(amountStr)
-		amountStr = utils.FormatOxg(amount)
+	case "ont":
+		amount = utils.ParseOnt(amountStr)
+		amountStr = utils.FormatOnt(amount)
+	case "ong":
+		amount = utils.ParseOng(amountStr)
+		amountStr = utils.FormatOng(amount)
 	default:
 		return fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -417,12 +417,12 @@ func withdrawONGTx(ctx *cli.Context) error {
 		return err
 	}
 
-	fromAddr := nutils.OnyxContractAddress.ToBase58()
+	fromAddr := nutils.OntContractAddress.ToBase58()
 
 	var amount uint64
 	amountStr := ctx.String(utils.GetFlagName(utils.TransferFromAmountFlag))
 	if amountStr == "" {
-		balance, err := utils.GetAllowance("oxg", fromAddr, accAddr)
+		balance, err := utils.GetAllowance("ong", fromAddr, accAddr)
 		if err != nil {
 			return err
 		}
@@ -431,15 +431,15 @@ func withdrawONGTx(ctx *cli.Context) error {
 			return err
 		}
 		if amount <= 0 {
-			return fmt.Errorf("haven't unbound oxg")
+			return fmt.Errorf("haven't unbound ong")
 		}
-		amountStr = utils.FormatOxg(amount)
+		amountStr = utils.FormatOng(amount)
 	} else {
-		amount = utils.ParseOxg(amountStr)
+		amount = utils.ParseOng(amountStr)
 		if amount <= 0 {
-			return fmt.Errorf("haven't unbound oxg")
+			return fmt.Errorf("haven't unbound ong")
 		}
-		amountStr = utils.FormatOxg(amount)
+		amountStr = utils.FormatOng(amount)
 	}
 
 	var payer common.Address
@@ -473,8 +473,8 @@ func withdrawONGTx(ctx *cli.Context) error {
 
 	PrintInfoMsg("Withdraw account:%s", accAddr)
 	PrintInfoMsg("Receive account:%s", receiveAddr)
-	PrintInfoMsg("Withdraw oxg amount:%v", amount)
-	mutTx, err := utils.TransferFromTx(gasPrice, gasLimit, "oxg", accAddr, fromAddr, receiveAddr, amount)
+	PrintInfoMsg("Withdraw ONG amount:%v", amount)
+	mutTx, err := utils.TransferFromTx(gasPrice, gasLimit, "ong", accAddr, fromAddr, receiveAddr, amount)
 	if err != nil {
 		return err
 	}

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package validation
@@ -29,27 +29,27 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/core/payload"
 	"github.com/OnyxPay/OnyxChain-legacy/core/signature"
 	"github.com/OnyxPay/OnyxChain-legacy/core/types"
-	onyxErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
+	ontErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
 )
 
 // VerifyTransaction verifys received single transaction
-func VerifyTransaction(tx *types.Transaction) onyxErrors.ErrCode {
+func VerifyTransaction(tx *types.Transaction) ontErrors.ErrCode {
 	if err := checkTransactionSignatures(tx); err != nil {
 		log.Info("transaction verify error:", err)
-		return onyxErrors.ErrVerifySignature
+		return ontErrors.ErrVerifySignature
 	}
 
 	if err := checkTransactionPayload(tx); err != nil {
 		log.Warn("[VerifyTransaction],", err)
-		return onyxErrors.ErrTransactionPayload
+		return ontErrors.ErrTransactionPayload
 	}
 
-	return onyxErrors.ErrNoError
+	return ontErrors.ErrNoError
 }
 
-func VerifyTransactionWithLedger(tx *types.Transaction, ledger *ledger.Ledger) onyxErrors.ErrCode {
+func VerifyTransactionWithLedger(tx *types.Transaction, ledger *ledger.Ledger) ontErrors.ErrCode {
 	//TODO: replay check
-	return onyxErrors.ErrNoError
+	return ontErrors.ErrNoError
 }
 
 func checkTransactionSignatures(tx *types.Transaction) error {

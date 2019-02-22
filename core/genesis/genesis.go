@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The OnyxChain Authors
- * This file is part of The OnyxChain library.
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
  *
- * The OnyxChain is free software: you can redistribute it and/or modify
+ * The ontology is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The OnyxChain is distributed in the hope that it will be useful,
+ * The ontology is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The OnyxChain.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package genesis
@@ -34,7 +34,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/core/utils"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/global_params"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/governance"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onyx"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
 	nutils "github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/utils"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/neovm"
 )
@@ -92,18 +92,18 @@ func BuildGenesisBlock(defaultBookkeeper []keypair.PublicKey, genesisConfig *con
 	}
 
 	//block
-	onyx := newGoverningToken()
-	oxg := newUtilityToken()
+	ont := newGoverningToken()
+	ong := newUtilityToken()
 	param := newParamContract()
-	oid := deployOnyxIDContract()
+	oid := deployOntIDContract()
 	auth := deployAuthContract()
 	config := newConfig()
 
 	genesisBlock := &types.Block{
 		Header: genesisHeader,
 		Transactions: []*types.Transaction{
-			onyx,
-			oxg,
+			ont,
+			ong,
 			param,
 			oid,
 			auth,
@@ -119,8 +119,8 @@ func BuildGenesisBlock(defaultBookkeeper []keypair.PublicKey, genesisConfig *con
 }
 
 func newGoverningToken() *types.Transaction {
-	mutable := utils.NewDeployTransaction(nutils.OnyxContractAddress[:], "ONYX", "1.0",
-		"OnyxChain Team", "contact@onyx.io", "OnyxChain Network ONYX Token", true)
+	mutable := utils.NewDeployTransaction(nutils.OntContractAddress[:], "ONT", "1.0",
+		"Ontology Team", "contact@ont.io", "Ontology Network ONT Token", true)
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
 		panic("constract genesis governing token transaction error ")
@@ -129,8 +129,8 @@ func newGoverningToken() *types.Transaction {
 }
 
 func newUtilityToken() *types.Transaction {
-	mutable := utils.NewDeployTransaction(nutils.OxgContractAddress[:], "oxg", "1.0",
-		"OnyxChain Team", "contact@onyx.io", "OnyxChain Network oxg Token", true)
+	mutable := utils.NewDeployTransaction(nutils.OngContractAddress[:], "ONG", "1.0",
+		"Ontology Team", "contact@ont.io", "Ontology Network ONG Token", true)
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
 		panic("constract genesis utility token transaction error ")
@@ -140,7 +140,7 @@ func newUtilityToken() *types.Transaction {
 
 func newParamContract() *types.Transaction {
 	mutable := utils.NewDeployTransaction(nutils.ParamContractAddress[:],
-		"ParamConfig", "1.0", "OnyxChain Team", "contact@onyx.io",
+		"ParamConfig", "1.0", "Ontology Team", "contact@ont.io",
 		"Chain Global Environment Variables Manager ", true)
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
@@ -151,7 +151,7 @@ func newParamContract() *types.Transaction {
 
 func newConfig() *types.Transaction {
 	mutable := utils.NewDeployTransaction(nutils.GovernanceContractAddress[:], "CONFIG", "1.0",
-		"OnyxChain Team", "contact@onyx.io", "OnyxChain Network Consensus Config", true)
+		"Ontology Team", "contact@ont.io", "Ontology Network Consensus Config", true)
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
 		panic("constract genesis config transaction error ")
@@ -161,7 +161,7 @@ func newConfig() *types.Transaction {
 
 func deployAuthContract() *types.Transaction {
 	mutable := utils.NewDeployTransaction(nutils.AuthContractAddress[:], "AuthContract", "1.0",
-		"OnyxChain Team", "contact@onyx.io", "OnyxChain Network Authorization Contract", true)
+		"Ontology Team", "contact@ont.io", "Ontology Network Authorization Contract", true)
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
 		panic("constract genesis auth transaction error ")
@@ -169,12 +169,12 @@ func deployAuthContract() *types.Transaction {
 	return tx
 }
 
-func deployOnyxIDContract() *types.Transaction {
-	mutable := utils.NewDeployTransaction(nutils.OnyxIDContractAddress[:], "OID", "1.0",
-		"OnyxChain Team", "contact@onyx.io", "OnyxChain Network ONYX ID", true)
+func deployOntIDContract() *types.Transaction {
+	mutable := utils.NewDeployTransaction(nutils.OntIDContractAddress[:], "OID", "1.0",
+		"Ontology Team", "contact@ont.io", "Ontology Network ONT ID", true)
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
-		panic("constract genesis onyxid transaction error ")
+		panic("constract genesis ontid transaction error ")
 	}
 	return tx
 }
@@ -197,7 +197,7 @@ func newGoverningInit() *types.Transaction {
 	distribute := []struct {
 		addr  common.Address
 		value uint64
-	}{{addr, constants.ONYX_TOTAL_SUPPLY}}
+	}{{addr, constants.ONT_TOTAL_SUPPLY}}
 
 	args := bytes.NewBuffer(nil)
 	nutils.WriteVarUint(args, uint64(len(distribute)))
@@ -206,7 +206,7 @@ func newGoverningInit() *types.Transaction {
 		nutils.WriteVarUint(args, part.value)
 	}
 
-	mutable := utils.BuildNativeTransaction(nutils.OnyxContractAddress, onyx.INIT_NAME, args.Bytes())
+	mutable := utils.BuildNativeTransaction(nutils.OntContractAddress, ont.INIT_NAME, args.Bytes())
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
 		panic("constract genesis governing token transaction error ")
@@ -215,7 +215,7 @@ func newGoverningInit() *types.Transaction {
 }
 
 func newUtilityInit() *types.Transaction {
-	mutable := utils.BuildNativeTransaction(nutils.OxgContractAddress, onyx.INIT_NAME, []byte{})
+	mutable := utils.BuildNativeTransaction(nutils.OngContractAddress, ont.INIT_NAME, []byte{})
 	tx, err := mutable.IntoImmutable()
 	if err != nil {
 		panic("constract genesis governing token transaction error ")
