@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package config
@@ -34,7 +34,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/errors"
 )
 
-var Version = "" //Set value when build project
+var Version = "1.0.0" //Set value when build project
 
 const (
 	DEFAULT_CONFIG_FILE_NAME = "./config.json"
@@ -78,7 +78,7 @@ const (
 	NETWORK_ID_MAIN_NET      = 1
 	NETWORK_ID_POLARIS_NET   = 2
 	NETWORK_ID_SOLO_NET      = 3
-	NETWORK_NAME_MAIN_NET    = "ontology"
+	NETWORK_NAME_MAIN_NET    = "onyxchain"
 	NETWORK_NAME_POLARIS_NET = "polaris"
 	NETWORK_NAME_SOLO_NET    = "testmode"
 )
@@ -113,10 +113,10 @@ func GetNetworkName(id uint32) string {
 
 var PolarisConfig = &GenesisConfig{
 	SeedList: []string{
-		"polaris1.ont.io:20338",
-		"polaris2.ont.io:20338",
-		"polaris3.ont.io:20338",
-		"polaris4.ont.io:20338"},
+		"polaris1.onx.io:20338",
+		"polaris2.onx.io:20338",
+		"polaris3.onx.io:20338",
+		"polaris4.onx.io:20338"},
 	ConsensusType: CONSENSUS_TYPE_VBFT,
 	VBFT: &VBFTConfig{
 		N:                    7,
@@ -127,7 +127,7 @@ var PolarisConfig = &GenesisConfig{
 		HashMsgDelay:         10000,
 		PeerHandshakeTimeout: 10,
 		MaxBlockChangeView:   3000,
-		AdminOntID:           "did:ont:AMAx993nE6NEqZjwBssUfopxnnvTdob9ij",
+		AdminOnxID:           "did:onx:AMAx993nE6NEqZjwBssUfopxnnvTdob9ij",
 		MinInitStake:         10000,
 		VrfValue:             "1c9810aa9822e511d5804a9c4db9dd08497c31087b0daafa34d768a3253441fa20515e2f30f81741102af0ca3cefc4818fef16adb825fbaa8cad78647f3afb590e",
 		VrfProof:             "c57741f934042cb8d8b087b44b161db56fc3ffd4ffb675d36cd09f83935be853d8729f3f5298d12d6fd28d45dde515a4b9d7f67682d182ba5118abf451ff1988",
@@ -182,11 +182,11 @@ var PolarisConfig = &GenesisConfig{
 
 var MainNetConfig = &GenesisConfig{
 	SeedList: []string{
-		"seed1.ont.io:20338",
-		"seed2.ont.io:20338",
-		"seed3.ont.io:20338",
-		"seed4.ont.io:20338",
-		"seed5.ont.io:20338"},
+		"seed1.onx.io:20338",
+		"seed2.onx.io:20338",
+		"seed3.onx.io:20338",
+		"seed4.onx.io:20338",
+		"seed5.onx.io:20338"},
 	ConsensusType: CONSENSUS_TYPE_VBFT,
 	VBFT: &VBFTConfig{
 		N:                    7,
@@ -197,7 +197,7 @@ var MainNetConfig = &GenesisConfig{
 		HashMsgDelay:         10000,
 		PeerHandshakeTimeout: 10,
 		MaxBlockChangeView:   120000,
-		AdminOntID:           "did:ont:AdjfcJgwru2FD8kotCPvLDXYzRjqFjc9Tb",
+		AdminOnxID:           "did:onx:AdjfcJgwru2FD8kotCPvLDXYzRjqFjc9Tb",
 		MinInitStake:         100000,
 		VrfValue:             "1c9810aa9822e511d5804a9c4db9dd08497c31087b0daafa34d768a3253441fa20515e2f30f81741102af0ca3cefc4818fef16adb825fbaa8cad78647f3afb590e",
 		VrfProof:             "c57741f934042cb8d8b087b44b161db56fc3ffd4ffb675d36cd09f83935be853d8729f3f5298d12d6fd28d45dde515a4b9d7f67682d182ba5118abf451ff1988",
@@ -243,7 +243,7 @@ var MainNetConfig = &GenesisConfig{
 	SOLO: &SOLOConfig{},
 }
 
-var DefConfig = NewOntologyConfig()
+var DefConfig = NewOnyxChainConfig()
 
 type GenesisConfig struct {
 	SeedList      []string
@@ -275,8 +275,8 @@ type VBFTConfig struct {
 	HashMsgDelay         uint32               `json:"hash_msg_delay"`
 	PeerHandshakeTimeout uint32               `json:"peer_handshake_timeout"`
 	MaxBlockChangeView   uint32               `json:"max_block_change_view"`
-	MinInitStake         uint32               `json:"min_init_stake"`
-	AdminOntID           string               `json:"admin_ont_id"`
+	MinInitStake         uint64               `json:"min_init_stake"`
+	AdminOnxID           string               `json:"admin_onx_id"`
 	VrfValue             string               `json:"vrf_value"`
 	VrfProof             string               `json:"vrf_proof"`
 	Peers                []*VBFTPeerStakeInfo `json:"peers"`
@@ -307,11 +307,11 @@ func (this *VBFTConfig) Serialize(w io.Writer) error {
 	if err := serialization.WriteUint32(w, this.MaxBlockChangeView); err != nil {
 		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.WriteUint32, serialize max_block_change_view error!")
 	}
-	if err := serialization.WriteUint32(w, this.MinInitStake); err != nil {
+	if err := serialization.WriteUint64(w, this.MinInitStake); err != nil {
 		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.WriteUint32, serialize min_init_stake error!")
 	}
-	if err := serialization.WriteString(w, this.AdminOntID); err != nil {
-		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.WriteString, serialize admin_ont_id error!")
+	if err := serialization.WriteString(w, this.AdminOnxID); err != nil {
+		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.WriteString, serialize admin_onx_id error!")
 	}
 	if err := serialization.WriteString(w, this.VrfValue); err != nil {
 		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.WriteString, serialize vrf_value error!")
@@ -363,13 +363,13 @@ func (this *VBFTConfig) Deserialize(r io.Reader) error {
 	if err != nil {
 		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.ReadUint32, deserialize maxBlockChangeView error!")
 	}
-	minInitStake, err := serialization.ReadUint32(r)
+	minInitStake, err := serialization.ReadUint64(r)
 	if err != nil {
-		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.ReadUint32, deserialize minInitStake error!")
+		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.ReadUint64, deserialize minInitStake error!")
 	}
-	adminOntID, err := serialization.ReadString(r)
+	adminOnxID, err := serialization.ReadString(r)
 	if err != nil {
-		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.ReadString, deserialize adminOntID error!")
+		return errors.NewDetailErr(err, errors.ErrNoCode, "serialization.ReadString, deserialize adminOnxID error!")
 	}
 	vrfValue, err := serialization.ReadString(r)
 	if err != nil {
@@ -401,7 +401,7 @@ func (this *VBFTConfig) Deserialize(r io.Reader) error {
 	this.PeerHandshakeTimeout = peerHandshakeTimeout
 	this.MaxBlockChangeView = maxBlockChangeView
 	this.MinInitStake = minInitStake
-	this.AdminOntID = adminOntID
+	this.AdminOnxID = adminOnxID
 	this.VrfValue = vrfValue
 	this.VrfProof = vrfProof
 	this.Peers = peers
@@ -530,7 +530,7 @@ type WebSocketConfig struct {
 	HttpKeyPath  string
 }
 
-type OntologyConfig struct {
+type OnyxChainConfig struct {
 	Genesis   *GenesisConfig
 	Common    *CommonConfig
 	Consensus *ConsensusConfig
@@ -540,8 +540,8 @@ type OntologyConfig struct {
 	Ws        *WebSocketConfig
 }
 
-func NewOntologyConfig() *OntologyConfig {
-	return &OntologyConfig{
+func NewOnyxChainConfig() *OnyxChainConfig {
+	return &OnyxChainConfig{
 		Genesis: MainNetConfig,
 		Common: &CommonConfig{
 			LogLevel:       DEFAULT_LOG_LEVEL,
@@ -589,7 +589,7 @@ func NewOntologyConfig() *OntologyConfig {
 	}
 }
 
-func (this *OntologyConfig) GetBookkeepers() ([]keypair.PublicKey, error) {
+func (this *OnyxChainConfig) GetBookkeepers() ([]keypair.PublicKey, error) {
 	var bookKeepers []string
 	switch this.Genesis.ConsensusType {
 	case CONSENSUS_TYPE_VBFT:
@@ -617,7 +617,7 @@ func (this *OntologyConfig) GetBookkeepers() ([]keypair.PublicKey, error) {
 	return pubKeys, nil
 }
 
-func (this *OntologyConfig) GetDefaultNetworkId() (uint32, error) {
+func (this *OnyxChainConfig) GetDefaultNetworkId() (uint32, error) {
 	defaultNetworkId, err := this.getDefNetworkIDFromGenesisConfig(this.Genesis)
 	if err != nil {
 		return 0, err
@@ -639,7 +639,7 @@ func (this *OntologyConfig) GetDefaultNetworkId() (uint32, error) {
 	return defaultNetworkId, nil
 }
 
-func (this *OntologyConfig) getDefNetworkIDFromGenesisConfig(genCfg *GenesisConfig) (uint32, error) {
+func (this *OnyxChainConfig) getDefNetworkIDFromGenesisConfig(genCfg *GenesisConfig) (uint32, error) {
 	var configData []byte
 	var err error
 	switch this.Genesis.ConsensusType {

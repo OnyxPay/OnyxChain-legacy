@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package utils
@@ -27,14 +27,14 @@ import (
 )
 
 const (
-	DEFAULT_EXPORT_FILE   = "./OntBlocks.dat"
+	DEFAULT_EXPORT_FILE   = "./OnxBlocks.dat"
 	DEFAULT_ABI_PATH      = "./abi"
 	DEFAULT_EXPORT_HEIGHT = 0
 	DEFAULT_WALLET_PATH   = "./wallet_data"
 )
 
 var (
-	//Ontology setting
+	//OnyxChain setting
 	ConfigFlag = cli.StringFlag{
 		Name:  "config",
 		Usage: "Genesis block config `<file>`. If doesn't specifies, use main net config as default.",
@@ -113,7 +113,7 @@ var (
 	}
 	NetworkIdFlag = cli.UintFlag{
 		Name:  "networkid",
-		Usage: "Network id `<number>`. 1=ontology main net, 2=polaris test net, 3=testmode, and other for custom network",
+		Usage: "Network id `<number>`. 1=onyxchain main net, 2=polaris test net, 3=testmode, and other for custom network",
 		Value: config.NETWORK_ID_MAIN_NET,
 	}
 	NodePortFlag = cli.UintFlag{
@@ -191,11 +191,11 @@ var (
 	AccountPassFlag = cli.StringFlag{
 		Name:   "password,p",
 		Hidden: true,
-		Usage:  "Account `<password>` when Ontology node starts.",
+		Usage:  "Account `<password>` when OnyxChain node starts.",
 	}
 	AccountAddressFlag = cli.StringFlag{
 		Name:  "account,a",
-		Usage: "Account `<address>` when the Ontology node starts. If not specific, using default account instead",
+		Usage: "Account `<address>` when the OnyxChain node starts. If not specific, using default account instead",
 	}
 	AccountDefaultFlag = cli.BoolFlag{
 		Name:  "default,d",
@@ -260,8 +260,8 @@ var (
 		Usage: "Pub key list of multi `<addresses>`, separate addreses with comma `,`",
 	}
 	IdentityFlag = cli.BoolFlag{
-		Name:  "ontid",
-		Usage: "create an ONT ID instead of account",
+		Name:  "onxid",
+		Usage: "create an ONX ID instead of account",
 	}
 
 	//SmartContract setting
@@ -330,8 +330,8 @@ var (
 	//Transfer setting
 	TransactionAssetFlag = cli.StringFlag{
 		Name:  "asset",
-		Usage: "Asset of ONT or ONG",
-		Value: ASSET_ONT,
+		Usage: "Asset of ONX or OXG",
+		Value: ASSET_ONX,
 	}
 	TransactionFromFlag = cli.StringFlag{
 		Name:  "from",
@@ -375,8 +375,8 @@ var (
 	}
 	ApproveAssetFlag = cli.StringFlag{
 		Name:  "asset",
-		Usage: "Asset of ONT of ONG to approve",
-		Value: "ont",
+		Usage: "Asset of ONYX of OXG to approve",
+		Value: "onyx",
 	}
 	ApproveAmountFlag = cli.StringFlag{
 		Name:  "amount",
@@ -392,7 +392,7 @@ var (
 	}
 	SendTxFlag = cli.BoolFlag{
 		Name:  "send,s",
-		Usage: "Send raw transaction to Ontology",
+		Usage: "Send raw transaction to OnyxChain",
 	}
 	ForceSendTxFlag = cli.BoolFlag{
 		Name:  "force,f",
@@ -406,11 +406,11 @@ var (
 		Name:  "prepare,p",
 		Usage: "Prepare execute transaction, without commit to ledger",
 	}
-	WithdrawONGReceiveAccountFlag = cli.StringFlag{
+	WithdrawOXGReceiveAccountFlag = cli.StringFlag{
 		Name:  "receive",
-		Usage: "ONG receive `<address>`，Default the same with owner account",
+		Usage: "OXG receive `<address>`，Default the same with owner account",
 	}
-	WithdrawONGAmountFlag = cli.StringFlag{
+	WithdrawOXGAmountFlag = cli.StringFlag{
 		Name:  "amount",
 		Usage: "Withdraw amount `<number>`, Float number. Default withdraw all",
 	}

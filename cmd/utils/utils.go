@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package utils
@@ -31,8 +31,8 @@ import (
 )
 
 const (
-	PRECISION_ONG = 9
-	PRECISION_ONT = 0
+	PRECISION_OXG = 9
+	PRECISION_ONX = 0
 )
 
 //FormatAssetAmount return asset amount multiplied by math.Pow10(precision) to raw float string
@@ -65,31 +65,31 @@ func ParseAssetAmount(rawAmount string, precision byte) uint64 {
 	return amount
 }
 
-func FormatOng(amount uint64) string {
-	return FormatAssetAmount(amount, PRECISION_ONG)
+func FormatOxg(amount uint64) string {
+	return FormatAssetAmount(amount, PRECISION_OXG)
 }
 
-func ParseOng(rawAmount string) uint64 {
-	return ParseAssetAmount(rawAmount, PRECISION_ONG)
+func ParseOxg(rawAmount string) uint64 {
+	return ParseAssetAmount(rawAmount, PRECISION_OXG)
 }
 
-func FormatOnt(amount uint64) string {
-	return FormatAssetAmount(amount, PRECISION_ONT)
+func FormatOnx(amount uint64) string {
+	return FormatAssetAmount(amount, PRECISION_ONX)
 }
 
-func ParseOnt(rawAmount string) uint64 {
-	return ParseAssetAmount(rawAmount, PRECISION_ONT)
+func ParseOnx(rawAmount string) uint64 {
+	return ParseAssetAmount(rawAmount, PRECISION_ONX)
 }
 
 func CheckAssetAmount(asset string, amount uint64) error {
 	switch strings.ToLower(asset) {
-	case "ont":
-		if amount > constants.ONT_TOTAL_SUPPLY {
-			return fmt.Errorf("amount:%d larger than ONT total supply:%d", amount, constants.ONT_TOTAL_SUPPLY)
+	case "onyx":
+		if amount > constants.ONX_TOTAL_SUPPLY {
+			return fmt.Errorf("amount:%d larger than ONYX total supply:%d", amount, constants.ONX_TOTAL_SUPPLY)
 		}
-	case "ong":
-		if amount > constants.ONG_TOTAL_SUPPLY {
-			return fmt.Errorf("amount:%d larger than ONG total supply:%d", amount, constants.ONG_TOTAL_SUPPLY)
+	case "oxg":
+		if amount > constants.OXG_TOTAL_SUPPLY {
+			return fmt.Errorf("amount:%d larger than OXG total supply:%d", amount, constants.OXG_TOTAL_SUPPLY)
 		}
 	default:
 		return fmt.Errorf("unknown asset:%s", asset)

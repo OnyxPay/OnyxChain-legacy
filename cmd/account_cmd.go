@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package cmd
@@ -40,7 +40,7 @@ var (
 		Usage:     "Manage accounts",
 		ArgsUsage: "[arguments...]",
 		Description: `Wallet management commands can be used to add, view, modify, delete, import account, and so on.
-You can use ./Ontology account --help command to view help information of wallet management command.`,
+You can use ./OnyxChain account --help command to view help information of wallet management command.`,
 		Subcommands: []cli.Command{
 			{
 				Action:    accountCreate,
@@ -58,8 +58,8 @@ You can use ./Ontology account --help command to view help information of wallet
 					utils.WalletFileFlag,
 				},
 				Description: ` Add a new account to wallet.
-   Ontology support three type of key: ecdsa, sm2 and ed25519, and support 224、256、384、521 bits length of key in ecdsa, but only support 256 bits length of key in sm2 and ed25519.
-   Ontology support multiple signature scheme.
+   OnyxChain support three type of key: ecdsa, sm2 and ed25519, and support 224、256、384、521 bits length of key in ecdsa, but only support 256 bits length of key in sm2 and ed25519.
+   OnyxChain support multiple signature scheme.
    For ECDSA support SHA224withECDSA、SHA256withECDSA、SHA384withECDSA、SHA512withEdDSA、SHA3-224withECDSA、SHA3-256withECDSA、SHA3-384withECDSA、SHA3-512withECDSA、RIPEMD160withECDSA;
    For SM2 support SM3withSM2, and for SHA512withEdDSA.
    -------------------------------------------------
@@ -179,18 +179,18 @@ func accountCreate(ctx *cli.Context) error {
 	}
 	defer common.ClearPasswd(pass)
 	if ctx.Bool(utils.IdentityFlag.Name) {
-		// create ONT ID
+		// create ONX ID
 		wd := wallet.GetWalletData()
 		id, err := account.NewIdentity(optionLabel, keyType, curve, pass)
 		if err != nil {
-			return fmt.Errorf("create ONT ID error: %s", err)
+			return fmt.Errorf("create ONX ID error: %s", err)
 		}
 		wd.AddIdentity(id)
 		err = wd.Save(optionFile)
 		if err != nil {
 			return fmt.Errorf("save to %s error: %s", optionFile, err)
 		}
-		PrintInfoMsg("ONT ID created:%s", id.ID)
+		PrintInfoMsg("ONX ID created:%s", id.ID)
 		PrintInfoMsg("Bind public key:%s", id.Control[0].Public)
 		return nil
 	}

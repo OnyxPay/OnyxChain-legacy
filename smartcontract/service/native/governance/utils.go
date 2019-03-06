@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package governance
@@ -31,7 +31,7 @@ import (
 	cstates "github.com/OnyxPay/OnyxChain-legacy/core/states"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/auth"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onx"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/utils"
 	"github.com/OnyxPay/OnyxChain-legacy/vm/neovm/types"
 )
@@ -113,30 +113,30 @@ func GetView(native *native.NativeService, contract common.Address) (uint32, err
 	return governanceView.View, nil
 }
 
-func appCallTransferOnt(native *native.NativeService, from common.Address, to common.Address, amount uint64) error {
-	err := appCallTransfer(native, utils.OntContractAddress, from, to, amount)
+func appCallTransferOnx(native *native.NativeService, from common.Address, to common.Address, amount uint64) error {
+	err := appCallTransfer(native, utils.OnxContractAddress, from, to, amount)
 	if err != nil {
-		return fmt.Errorf("appCallTransferOnt, appCallTransfer error: %v", err)
+		return fmt.Errorf("appCallTransferOnx, appCallTransfer error: %v", err)
 	}
 	return nil
 }
 
-func appCallTransferOng(native *native.NativeService, from common.Address, to common.Address, amount uint64) error {
-	err := appCallTransfer(native, utils.OngContractAddress, from, to, amount)
+func appCallTransferOxg(native *native.NativeService, from common.Address, to common.Address, amount uint64) error {
+	err := appCallTransfer(native, utils.OxgContractAddress, from, to, amount)
 	if err != nil {
-		return fmt.Errorf("appCallTransferOng, appCallTransfer error: %v", err)
+		return fmt.Errorf("appCallTransferOxg, appCallTransfer error: %v", err)
 	}
 	return nil
 }
 
 func appCallTransfer(native *native.NativeService, contract common.Address, from common.Address, to common.Address, amount uint64) error {
-	var sts []ont.State
-	sts = append(sts, ont.State{
+	var sts []onx.State
+	sts = append(sts, onx.State{
 		From:  from,
 		To:    to,
 		Value: amount,
 	})
-	transfers := ont.Transfers{
+	transfers := onx.Transfers{
 		States: sts,
 	}
 	sink := common.NewZeroCopySink(nil)
@@ -148,24 +148,24 @@ func appCallTransfer(native *native.NativeService, contract common.Address, from
 	return nil
 }
 
-func appCallTransferFromOnt(native *native.NativeService, sender common.Address, from common.Address, to common.Address, amount uint64) error {
-	err := appCallTransferFrom(native, utils.OntContractAddress, sender, from, to, amount)
+func appCallTransferFromOnx(native *native.NativeService, sender common.Address, from common.Address, to common.Address, amount uint64) error {
+	err := appCallTransferFrom(native, utils.OnxContractAddress, sender, from, to, amount)
 	if err != nil {
-		return fmt.Errorf("appCallTransferFromOnt, appCallTransferFrom error: %v", err)
+		return fmt.Errorf("appCallTransferFromOnx, appCallTransferFrom error: %v", err)
 	}
 	return nil
 }
 
-func appCallTransferFromOng(native *native.NativeService, sender common.Address, from common.Address, to common.Address, amount uint64) error {
-	err := appCallTransferFrom(native, utils.OngContractAddress, sender, from, to, amount)
+func appCallTransferFromOxg(native *native.NativeService, sender common.Address, from common.Address, to common.Address, amount uint64) error {
+	err := appCallTransferFrom(native, utils.OxgContractAddress, sender, from, to, amount)
 	if err != nil {
-		return fmt.Errorf("appCallTransferFromOng, appCallTransferFrom error: %v", err)
+		return fmt.Errorf("appCallTransferFromOxg, appCallTransferFrom error: %v", err)
 	}
 	return nil
 }
 
 func appCallTransferFrom(native *native.NativeService, contract common.Address, sender common.Address, from common.Address, to common.Address, amount uint64) error {
-	params := &ont.TransferFrom{
+	params := &onx.TransferFrom{
 		Sender: sender,
 		From:   from,
 		To:     to,
@@ -180,18 +180,18 @@ func appCallTransferFrom(native *native.NativeService, contract common.Address, 
 	return nil
 }
 
-func getOngBalance(native *native.NativeService, address common.Address) (uint64, error) {
+func getOxgBalance(native *native.NativeService, address common.Address) (uint64, error) {
 	bf := new(bytes.Buffer)
 	err := utils.WriteAddress(bf, address)
 	if err != nil {
-		return 0, fmt.Errorf("getOngBalance, utils.WriteAddress error: %v", err)
+		return 0, fmt.Errorf("getOxgBalance, utils.WriteAddress error: %v", err)
 	}
 	sink := common.ZeroCopySink{}
 	utils.EncodeAddress(&sink, address)
 
-	value, err := native.NativeCall(utils.OngContractAddress, "balanceOf", sink.Bytes())
+	value, err := native.NativeCall(utils.OxgContractAddress, "balanceOf", sink.Bytes())
 	if err != nil {
-		return 0, fmt.Errorf("getOngBalance, appCall error: %v", err)
+		return 0, fmt.Errorf("getOxgBalance, appCall error: %v", err)
 	}
 	balance := types.BigIntFromBytes(value.([]byte)).Uint64()
 	return balance, nil
@@ -349,7 +349,7 @@ func CheckVBFTConfig(configuration *config.VBFTConfig) error {
 	if configuration.PeerHandshakeTimeout < 10 {
 		return fmt.Errorf("initConfig. PeerHandshakeTimeout must >= 10")
 	}
-	if configuration.MinInitStake < 10000 {
+	if configuration.MinInitStake < uint64(10000) {
 		return fmt.Errorf("initConfig. MinInitStake must >= 10000")
 	}
 	if len(configuration.VrfProof) < 128 {
@@ -671,10 +671,10 @@ func putSplitCurve(native *native.NativeService, contract common.Address, splitC
 	return nil
 }
 
-func appCallInitContractAdmin(native *native.NativeService, adminOntID []byte) error {
+func appCallInitContractAdmin(native *native.NativeService, adminOnxID []byte) error {
 	bf := new(bytes.Buffer)
 	params := &auth.InitContractAdminParam{
-		AdminOntID: adminOntID,
+		AdminOnxID: adminOnxID,
 	}
 	err := params.Serialize(bf)
 	if err != nil {

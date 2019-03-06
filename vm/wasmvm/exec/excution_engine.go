@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package exec
@@ -531,11 +531,11 @@ func (e *ExecutionEngine) call(caller common.Address,
 }
 
 //FIXME NOT IN USE BUT DON'T DELETE IT
-//current we only support the ONT SYSTEM module import
+//current we only support the ONX SYSTEM module import
 //other imports will raise an error
 func importer(name string) (*wasm.Module, error) {
 	//TODO add the path into config file
-	if name != "ONT" {
+	if name != "ONYX" {
 		return nil, errors.NewErr("import [" + name + "] is not supported! ")
 	}
 	f, err := os.Open(name + ".wasm")

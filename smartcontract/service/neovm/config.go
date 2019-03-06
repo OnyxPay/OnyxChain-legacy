@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package neovm
@@ -52,8 +52,8 @@ var (
 	VM_STEP_LIMIT        int = 400000
 
 	// API Name
-	ATTRIBUTE_GETUSAGE_NAME = "Ontology.Attribute.GetUsage"
-	ATTRIBUTE_GETDATA_NAME  = "Ontology.Attribute.GetData"
+	ATTRIBUTE_GETUSAGE_NAME = "OnyxChain.Attribute.GetUsage"
+	ATTRIBUTE_GETDATA_NAME  = "OnyxChain.Attribute.GetData"
 
 	BLOCK_GETTRANSACTIONCOUNT_NAME       = "System.Block.GetTransactionCount"
 	BLOCK_GETTRANSACTIONS_NAME           = "System.Block.GetTransactions"
@@ -67,22 +67,22 @@ var (
 
 	HEADER_GETINDEX_NAME         = "System.Header.GetIndex"
 	HEADER_GETHASH_NAME          = "System.Header.GetHash"
-	HEADER_GETVERSION_NAME       = "Ontology.Header.GetVersion"
+	HEADER_GETVERSION_NAME       = "OnyxChain.Header.GetVersion"
 	HEADER_GETPREVHASH_NAME      = "System.Header.GetPrevHash"
 	HEADER_GETTIMESTAMP_NAME     = "System.Header.GetTimestamp"
-	HEADER_GETCONSENSUSDATA_NAME = "Ontology.Header.GetConsensusData"
-	HEADER_GETNEXTCONSENSUS_NAME = "Ontology.Header.GetNextConsensus"
-	HEADER_GETMERKLEROOT_NAME    = "Ontology.Header.GetMerkleRoot"
+	HEADER_GETCONSENSUSDATA_NAME = "OnyxChain.Header.GetConsensusData"
+	HEADER_GETNEXTCONSENSUS_NAME = "OnyxChain.Header.GetNextConsensus"
+	HEADER_GETMERKLEROOT_NAME    = "OnyxChain.Header.GetMerkleRoot"
 
 	TRANSACTION_GETHASH_NAME       = "System.Transaction.GetHash"
-	TRANSACTION_GETTYPE_NAME       = "Ontology.Transaction.GetType"
-	TRANSACTION_GETATTRIBUTES_NAME = "Ontology.Transaction.GetAttributes"
+	TRANSACTION_GETTYPE_NAME       = "OnyxChain.Transaction.GetType"
+	TRANSACTION_GETATTRIBUTES_NAME = "OnyxChain.Transaction.GetAttributes"
 
-	CONTRACT_CREATE_NAME            = "Ontology.Contract.Create"
-	CONTRACT_MIGRATE_NAME           = "Ontology.Contract.Migrate"
+	CONTRACT_CREATE_NAME            = "OnyxChain.Contract.Create"
+	CONTRACT_MIGRATE_NAME           = "OnyxChain.Contract.Migrate"
 	CONTRACT_GETSTORAGECONTEXT_NAME = "System.Contract.GetStorageContext"
 	CONTRACT_DESTROY_NAME           = "System.Contract.Destroy"
-	CONTRACT_GETSCRIPT_NAME         = "Ontology.Contract.GetScript"
+	CONTRACT_GETSCRIPT_NAME         = "OnyxChain.Contract.GetScript"
 
 	STORAGE_GET_NAME                = "System.Storage.Get"
 	STORAGE_PUT_NAME                = "System.Storage.Put"
@@ -99,11 +99,11 @@ var (
 	RUNTIME_GETTRIGGER_NAME          = "System.Runtime.GetTrigger"
 	RUNTIME_SERIALIZE_NAME           = "System.Runtime.Serialize"
 	RUNTIME_DESERIALIZE_NAME         = "System.Runtime.Deserialize"
-	RUNTIME_BASE58TOADDRESS_NAME     = "Ontology.Runtime.Base58ToAddress"
-	RUNTIME_ADDRESSTOBASE58_NAME     = "Ontology.Runtime.AddressToBase58"
-	RUNTIME_GETCURRENTBLOCKHASH_NAME = "Ontology.Runtime.GetCurrentBlockHash"
+	RUNTIME_BASE58TOADDRESS_NAME     = "OnyxChain.Runtime.Base58ToAddress"
+	RUNTIME_ADDRESSTOBASE58_NAME     = "OnyxChain.Runtime.AddressToBase58"
+	RUNTIME_GETCURRENTBLOCKHASH_NAME = "OnyxChain.Runtime.GetCurrentBlockHash"
 
-	NATIVE_INVOKE_NAME = "Ontology.Native.Invoke"
+	NATIVE_INVOKE_NAME = "OnyxChain.Native.Invoke"
 
 	GETSCRIPTCONTAINER_NAME     = "System.ExecutionEngine.GetScriptContainer"
 	GETEXECUTINGSCRIPTHASH_NAME = "System.ExecutionEngine.GetExecutingScriptHash"

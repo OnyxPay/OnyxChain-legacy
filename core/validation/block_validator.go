@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package validation
@@ -25,7 +25,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/core/ledger"
 	"github.com/OnyxPay/OnyxChain-legacy/core/signature"
 	"github.com/OnyxPay/OnyxChain-legacy/core/types"
-	ontErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
+	onxErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
 )
 
 // VerifyBlock checks whether the block is valid
@@ -65,11 +65,11 @@ func VerifyBlock(block *types.Block, ld *ledger.Ledger, completely bool) error {
 			}
 		*/
 		for _, txVerify := range block.Transactions {
-			if errCode := VerifyTransaction(txVerify); errCode != ontErrors.ErrNoError {
+			if errCode := VerifyTransaction(txVerify); errCode != onxErrors.ErrNoError {
 				return errors.New(fmt.Sprintf("VerifyTransaction failed when verifiy block"))
 			}
 
-			if errCode := VerifyTransactionWithLedger(txVerify, ld); errCode != ontErrors.ErrNoError {
+			if errCode := VerifyTransactionWithLedger(txVerify, ld); errCode != onxErrors.ErrNoError {
 				return errors.New(fmt.Sprintf("VerifyTransaction failed when verifiy block"))
 			}
 		}

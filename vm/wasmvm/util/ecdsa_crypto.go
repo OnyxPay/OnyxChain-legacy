@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package util
@@ -26,7 +26,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-crypto/keypair"
 	s "github.com/OnyxPay/OnyxChain-crypto/signature"
 	"github.com/OnyxPay/OnyxChain-legacy/common/log"
-	ontErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
+	onxErrors "github.com/OnyxPay/OnyxChain-legacy/errors"
 	"golang.org/x/crypto/ripemd160"
 )
 
@@ -55,13 +55,13 @@ func (c *ECDsaCrypto) VerifySignature(message []byte, signature []byte, pubkey [
 
 	pk, err := keypair.DeserializePublicKey(pubkey)
 	if err != nil {
-		return false, ontErrors.NewDetailErr(errors.New("[ECDsaCrypto], deserializing public key failed."), ontErrors.ErrNoCode, "")
+		return false, onxErrors.NewDetailErr(errors.New("[ECDsaCrypto], deserializing public key failed."), onxErrors.ErrNoCode, "")
 	}
 
 	sig, err := s.Deserialize(signature)
 	ok := s.Verify(pk, message, sig)
 	if !ok {
-		return false, ontErrors.NewDetailErr(errors.New("[ECDsaCrypto], VerifySignature failed."), ontErrors.ErrNoCode, "")
+		return false, onxErrors.NewDetailErr(errors.New("[ECDsaCrypto], VerifySignature failed."), onxErrors.ErrNoCode, "")
 	}
 
 	return true, nil

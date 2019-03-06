@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package ledgerstore
@@ -38,7 +38,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/event"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/global_params"
 	ninit "github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/init"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onx"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/utils"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/neovm"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/storage"
@@ -256,13 +256,13 @@ func SaveNotify(eventStore scommon.EventStore, txHash common.Uint256, notify *ev
 }
 
 func genNativeTransferCode(from, to common.Address, value uint64) []byte {
-	transfer := ont.Transfers{States: []ont.State{{From: from, To: to, Value: value}}}
+	transfer := onx.Transfers{States: []onx.State{{From: from, To: to, Value: value}}}
 	tr := new(bytes.Buffer)
 	transfer.Serialize(tr)
 	return tr.Bytes()
 }
 
-// check whether payer ong balance sufficient
+// check whether payer oxg balance sufficient
 func isBalanceSufficient(payer common.Address, cache *storage.CacheDB, config *smartcontract.Config, store store.LedgerStore, gas uint64) (uint64, error) {
 	balance, err := getBalanceFromNative(config, cache, store, payer)
 	if err != nil {
@@ -287,7 +287,7 @@ func chargeCostGas(payer common.Address, gas uint64, config *smartcontract.Confi
 	}
 
 	service, _ := sc.NewNativeService()
-	_, err := service.NativeCall(utils.OngContractAddress, "transfer", params)
+	_, err := service.NativeCall(utils.OxgContractAddress, "transfer", params)
 	if err != nil {
 		return nil, err
 	}
@@ -350,7 +350,7 @@ func getBalanceFromNative(config *smartcontract.Config, cache *storage.CacheDB, 
 	}
 
 	service, _ := sc.NewNativeService()
-	result, err := service.NativeCall(utils.OngContractAddress, ont.BALANCEOF_NAME, bf.Bytes())
+	result, err := service.NativeCall(utils.OxgContractAddress, onx.BALANCEOF_NAME, bf.Bytes())
 	if err != nil {
 		return 0, err
 	}

@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package nodeinfo
@@ -33,7 +33,7 @@ const TEMPLATE_PAGE = `
 	td.pk {word-break: break-all; overflow: hidden}
 	table.bd {border: 1px solid #111111; font-size:20px;}
 	table.bt {border: 1px solid #111111; font-size:25px;}
-	table.font {font-size:20px;}
+	table.fonx {font-size:20px;}
 	a.site {cursor:hand; text-decoration:none;}
 </style>
 </head>
@@ -52,7 +52,7 @@ const TEMPLATE_PAGE = `
 <td width="20%" >
 	<table class="font" width="100%">
 	<tr><th>BlockHeight</th></tr>
-	<tr><td align="center"><b><font size="40px">{{.BlockHeight}}</font></b></td></tr>
+	<tr><td align="center"><b><fonx size="40px">{{.BlockHeight}}</font></b></td></tr>
 	</table>
 </td>
 <td width="80%">
@@ -77,7 +77,7 @@ const TEMPLATE_PAGE = `
 <td width="20%" >
 	<table class="font" width="100%">
 	<tr><th>Neighbor Count</th></tr>
-	<tr><td align="center"><b><font size="40px">{{.NeighborCnt}}</font></b></td></tr>
+	<tr><td align="center"><b><fonx size="40px">{{.NeighborCnt}}</font></b></td></tr>
 	</table>
 </td>
 <td width="80%">
@@ -98,7 +98,7 @@ const TEMPLATE_PAGE = `
 
 <table class="font" border="0" width="80%">
 	<tr>
-	<td width="26%" align="center"><a href="https://ont.io" class="site">site : https://ont.io</a></td>
+	<td width="26%" align="center"><a href="https://onx.io" class="site">site : https://onx.io</a></td>
 	</tr>
 </table>
 <br><br><br><br>

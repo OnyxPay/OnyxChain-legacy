@@ -1,24 +1,24 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 //Governance contract:
-//Users can apply for a candidate node to join consensus selection, deposit ONT to authorize for candidate nodes, quit selection and unAuthorize for candidate nodes through this contract.
-//ONT deposited in the contract can get ONG bonus which come from transaction fee of the network.
+//Users can apply for a candidate node to join consensus selection, deposit ONX to authorize for candidate nodes, quit selection and unAuthorize for candidate nodes through this contract.
+//ONX deposited in the contract can get OXG bonus which come from transaction fee of the network.
 package governance
 
 import (
@@ -62,7 +62,7 @@ const (
 	WHITE_NODE                       = "whiteNode"
 	QUIT_NODE                        = "quitNode"
 	WITHDRAW                         = "withdraw"
-	WITHDRAW_ONG                     = "withdrawOng"
+	WITHDRAW_OXG                     = "withdrawOxg"
 	WITHDRAW_FEE                     = "withdrawFee"
 	COMMIT_DPOS                      = "commitDpos"
 	UPDATE_CONFIG                    = "updateConfig"
@@ -100,8 +100,8 @@ const (
 	NEW_VERSION_BLOCK = 414100
 )
 
-// candidate fee must >= 1 ONG
-var MIN_CANDIDATE_FEE = uint64(math.Pow(10, constants.ONG_DECIMALS))
+// candidate fee must >= 1 OXG
+var MIN_CANDIDATE_FEE = uint64(math.Pow(10, constants.OXG_DECIMALS))
 var AUTHORIZE_INFO_POOL = []byte{118, 111, 116, 101, 73, 110, 102, 111, 80, 111, 111, 108}
 var Xi = []uint32{
 	0, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1100000, 1200000, 1300000, 1400000,
@@ -129,7 +129,7 @@ func RegisterGovernanceContract(native *native.NativeService) {
 	native.Register(UNAUTHORIZE_FOR_PEER, UnAuthorizeForPeer)
 	native.Register(WITHDRAW, Withdraw)
 	native.Register(QUIT_NODE, QuitNode)
-	native.Register(WITHDRAW_ONG, WithdrawOng)
+	native.Register(WITHDRAW_OXG, WithdrawOxg)
 	native.Register(CHANGE_MAX_AUTHORIZATION, ChangeMaxAuthorization)
 	native.Register(SET_PEER_COST, SetPeerCost)
 	native.Register(WITHDRAW_FEE, WithdrawFee)
@@ -150,7 +150,7 @@ func RegisterGovernanceContract(native *native.NativeService) {
 	native.Register(SET_PROMISE_POS, SetPromisePos)
 }
 
-//Init governance contract, include vbft config, global param and ontid admin.
+//Init governance contract, include vbft config, global param and onxid admin.
 func InitConfig(native *native.NativeService) ([]byte, error) {
 	configuration := new(config.VBFTConfig)
 	buf, err := serialization.ReadVarBytes(bytes.NewBuffer(native.Input))
@@ -294,8 +294,8 @@ func InitConfig(native *native.NativeService) ([]byte, error) {
 		return utils.BYTE_FALSE, fmt.Errorf("putSplitCurve, put splitCurve error: %v", err)
 	}
 
-	//init admin OntID
-	err = appCallInitContractAdmin(native, []byte(configuration.AdminOntID))
+	//init admin OnxID
+	err = appCallInitContractAdmin(native, []byte(configuration.AdminOnxID))
 	if err != nil {
 		return utils.BYTE_FALSE, fmt.Errorf("appCallInitContractAdmin error: %v", err)
 	}
@@ -304,9 +304,9 @@ func InitConfig(native *native.NativeService) ([]byte, error) {
 }
 
 //Register a candidate node, used by users.
-//Users can register a candidate node with a authorized ontid.
+//Users can register a candidate node with a authorized onxid.
 //Candidate node can be authorized and become consensus node according to their pos.
-//Candidate node can get ong bonus according to their pos.
+//Candidate node can get oxg bonus according to their pos.
 func RegisterCandidate(native *native.NativeService) ([]byte, error) {
 	err := registerCandidate(native, "transfer")
 	if err != nil {
@@ -316,9 +316,9 @@ func RegisterCandidate(native *native.NativeService) ([]byte, error) {
 }
 
 //Register a candidate node, used by contracts.
-//Contracts can register a candidate node with a authorized ontid after approving ont to governance contract before invoke this function.
+//Contracts can register a candidate node with a authorized onxid after approving onx to governance contract before invoke this function.
 //Candidate node can be authorized and become consensus node according to their pos.
-//Candidate node can get ong bonus according to their pos.
+//Candidate node can get oxg bonus according to their pos.
 func RegisterCandidateTransferFrom(native *native.NativeService) ([]byte, error) {
 	err := registerCandidate(native, "transferFrom")
 	if err != nil {
@@ -327,7 +327,7 @@ func RegisterCandidateTransferFrom(native *native.NativeService) ([]byte, error)
 	return utils.BYTE_TRUE, nil
 }
 
-//Unregister a registered candidate node, will remove node from pool, and unfreeze deposit ont.
+//Unregister a registered candidate node, will remove node from pool, and unfreeze deposit onx.
 func UnRegisterCandidate(native *native.NativeService) ([]byte, error) {
 	params := new(UnRegisterCandidateParam)
 	if err := params.Deserialize(bytes.NewBuffer(native.Input)); err != nil {
@@ -390,7 +390,7 @@ func UnRegisterCandidate(native *native.NativeService) ([]byte, error) {
 }
 
 //Approve a registered candidate node
-//Only approved candidate node can participate in consensus selection and get ong bonus.
+//Only approved candidate node can participate in consensus selection and get oxg bonus.
 func ApproveCandidate(native *native.NativeService) ([]byte, error) {
 	params := new(ApproveCandidateParam)
 	if err := params.Deserialize(bytes.NewBuffer(native.Input)); err != nil {
@@ -519,8 +519,8 @@ func ApproveCandidate(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-//Reject a registered candidate node, remove node from pool and unfreeze deposit ont
-//Only approved candidate node can participate in consensus selection and get ong bonus.
+//Reject a registered candidate node, remove node from pool and unfreeze deposit onx
+//Only approved candidate node can participate in consensus selection and get oxg bonus.
 func RejectCandidate(native *native.NativeService) ([]byte, error) {
 	params := new(RejectCandidateParam)
 	if err := params.Deserialize(bytes.NewBuffer(native.Input)); err != nil {
@@ -773,7 +773,7 @@ func QuitNode(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-//Authorize for a node by depositing ONT in this governance contract, used by users
+//Authorize for a node by depositing ONX in this governance contract, used by users
 func AuthorizeForPeer(native *native.NativeService) ([]byte, error) {
 	err := authorizeForPeer(native, "transfer")
 	if err != nil {
@@ -782,7 +782,7 @@ func AuthorizeForPeer(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-//Authorize for a node by depositing ONT in this governance contract, used by contracts
+//Authorize for a node by depositing ONX in this governance contract, used by contracts
 func AuthorizeForPeerTransferFrom(native *native.NativeService) ([]byte, error) {
 	err := authorizeForPeer(native, "transferFrom")
 	if err != nil {
@@ -791,7 +791,7 @@ func AuthorizeForPeerTransferFrom(native *native.NativeService) ([]byte, error) 
 	return utils.BYTE_TRUE, nil
 }
 
-//UnAuthorize for a node by redeeming ONT from this governance contract
+//UnAuthorize for a node by redeeming ONX from this governance contract
 func UnAuthorizeForPeer(native *native.NativeService) ([]byte, error) {
 	params := &AuthorizeForPeerParam{
 		PeerPubkeyList: make([]string, 0),
@@ -898,7 +898,7 @@ func UnAuthorizeForPeer(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-//Withdraw unfreezed ONT deposited in this governance contract.
+//Withdraw unfreezed ONX deposited in this governance contract.
 func Withdraw(native *native.NativeService) ([]byte, error) {
 	params := &WithdrawParam{
 		PeerPubkeyList: make([]string, 0),
@@ -945,10 +945,10 @@ func Withdraw(native *native.NativeService) ([]byte, error) {
 		}
 	}
 
-	//ont transfer
-	err = appCallTransferOnt(native, utils.GovernanceContractAddress, address, total)
+	//onx transfer
+	err = appCallTransferOnx(native, utils.GovernanceContractAddress, address, total)
 	if err != nil {
-		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOnt, ont transfer error: %v", err)
+		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOnx, onx transfer error: %v", err)
 	}
 
 	//update total stake
@@ -1213,7 +1213,7 @@ func UpdateSplitCurve(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-//Transfer all punished ONT of a black node to a certain address
+//Transfer all punished ONX of a black node to a certain address
 func TransferPenalty(native *native.NativeService) ([]byte, error) {
 	// get admin from database
 	adminAddress, err := global_params.GetStorageRole(native,
@@ -1242,9 +1242,9 @@ func TransferPenalty(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-//Withdraw unbounded ONG according to deposit ONT in this governance contract
-func WithdrawOng(native *native.NativeService) ([]byte, error) {
-	params := new(WithdrawOngParam)
+//Withdraw unbounded OXG according to deposit ONX in this governance contract
+func WithdrawOxg(native *native.NativeService) ([]byte, error) {
+	params := new(WithdrawOxgParam)
 	if err := params.Deserialize(bytes.NewBuffer(native.Input)); err != nil {
 		return utils.BYTE_FALSE, fmt.Errorf("deserialize, deserialize transferPenaltyParam error: %v", err)
 	}
@@ -1253,13 +1253,13 @@ func WithdrawOng(native *native.NativeService) ([]byte, error) {
 	//check witness
 	err := utils.ValidateOwner(native, params.Address)
 	if err != nil {
-		return utils.BYTE_FALSE, fmt.Errorf("withdrawOng, checkWitness error: %v", err)
+		return utils.BYTE_FALSE, fmt.Errorf("withdrawOxg, checkWitness error: %v", err)
 	}
 
-	// ont transfer to trigger unboundong
-	err = appCallTransferOnt(native, utils.GovernanceContractAddress, utils.GovernanceContractAddress, 1)
+	// onx transfer to trigger unboundoxg
+	err = appCallTransferOnx(native, utils.GovernanceContractAddress, utils.GovernanceContractAddress, 1)
 	if err != nil {
-		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOnt, ont transfer error: %v", err)
+		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOnx, onx transfer error: %v", err)
 	}
 
 	totalStake, err := getTotalStake(native, contract, params.Address)
@@ -1270,10 +1270,10 @@ func WithdrawOng(native *native.NativeService) ([]byte, error) {
 	preTimeOffset := totalStake.TimeOffset
 	timeOffset := native.Time - constants.GENESIS_BLOCK_TIMESTAMP
 
-	amount := utils.CalcUnbindOng(totalStake.Stake, preTimeOffset, timeOffset)
-	err = appCallTransferFromOng(native, utils.GovernanceContractAddress, utils.OntContractAddress, totalStake.Address, amount)
+	amount := utils.CalcUnbindOxg(totalStake.Stake, preTimeOffset, timeOffset)
+	err = appCallTransferFromOxg(native, utils.GovernanceContractAddress, utils.OnxContractAddress, totalStake.Address, amount)
 	if err != nil {
-		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferFromOng, transfer from ong error: %v", err)
+		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferFromOxg, transfer from oxg error: %v", err)
 	}
 
 	totalStake.TimeOffset = timeOffset
@@ -1285,7 +1285,7 @@ func WithdrawOng(native *native.NativeService) ([]byte, error) {
 	return utils.BYTE_TRUE, nil
 }
 
-//Change the status if node can receive authorization from ont holders
+//Change the status if node can receive authorization from onx holders
 func ChangeMaxAuthorization(native *native.NativeService) ([]byte, error) {
 	if native.Height < NEW_VERSION_BLOCK {
 		return utils.BYTE_FALSE, fmt.Errorf("block num is not reached for this func")
@@ -1423,10 +1423,10 @@ func WithdrawFee(native *native.NativeService) ([]byte, error) {
 	}
 	fee := splitFeeAddress.Amount
 
-	//ong transfer
-	err = appCallTransferOng(native, utils.GovernanceContractAddress, params.Address, fee)
+	//oxg transfer
+	err = appCallTransferOxg(native, utils.GovernanceContractAddress, params.Address, fee)
 	if err != nil {
-		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOng, ong transfer error: %v", err)
+		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOxg, oxg transfer error: %v", err)
 	}
 
 	//delete from splitFeeAddress
@@ -1495,10 +1495,10 @@ func AddInitPos(native *native.NativeService) ([]byte, error) {
 		return utils.BYTE_FALSE, fmt.Errorf("putPeerPoolMap error: %v", err)
 	}
 
-	//ont transfer
-	err = appCallTransferOnt(native, params.Address, utils.GovernanceContractAddress, uint64(params.Pos))
+	//onx transfer
+	err = appCallTransferOnx(native, params.Address, utils.GovernanceContractAddress, uint64(params.Pos))
 	if err != nil {
-		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOnt, ont transfer error: %v", err)
+		return utils.BYTE_FALSE, fmt.Errorf("appCallTransferOnx, onx transfer error: %v", err)
 	}
 
 	//update total stake

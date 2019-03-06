@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package utils
@@ -35,7 +35,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/core/types"
 	httpcom "github.com/OnyxPay/OnyxChain-legacy/http/base/common"
 	rpccommon "github.com/OnyxPay/OnyxChain-legacy/http/base/common"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onx"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/utils"
 	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/wasmvm"
 	cstates "github.com/OnyxPay/OnyxChain-legacy/smartcontract/states"
@@ -49,14 +49,14 @@ import (
 
 const (
 	VERSION_TRANSACTION    = byte(0)
-	VERSION_CONTRACT_ONT   = byte(0)
-	VERSION_CONTRACT_ONG   = byte(0)
+	VERSION_CONTRACT_ONX   = byte(0)
+	VERSION_CONTRACT_OXG   = byte(0)
 	CONTRACT_TRANSFER      = "transfer"
 	CONTRACT_TRANSFER_FROM = "transferFrom"
 	CONTRACT_APPROVE       = "approve"
 
-	ASSET_ONT = "ont"
-	ASSET_ONG = "ong"
+	ASSET_ONX = "onyx"
+	ASSET_OXG = "oxg"
 )
 
 func init() {
@@ -65,13 +65,13 @@ func init() {
 
 //Return balance of address in base58 code
 func GetBalance(address string) (*httpcom.BalanceOfRsp, error) {
-	result, ontErr := sendRpcRequest("getbalance", []interface{}{address})
-	if ontErr != nil {
-		switch ontErr.ErrorCode {
+	result, onxErr := sendRpcRequest("getbalance", []interface{}{address})
+	if onxErr != nil {
+		switch onxErr.ErrorCode {
 		case ERROR_INVALID_PARAMS:
 			return nil, fmt.Errorf("invalid address:%s", address)
 		}
-		return nil, ontErr.Error
+		return nil, onxErr.Error
 	}
 	balance := &httpcom.BalanceOfRsp{}
 	err := json.Unmarshal(result, balance)
@@ -88,10 +88,10 @@ func GetAccountBalance(address, asset string) (uint64, error) {
 	}
 	var balance uint64
 	switch strings.ToLower(asset) {
-	case "ont":
-		balance, err = strconv.ParseUint(balances.Ont, 10, 64)
-	case "ong":
-		balance, err = strconv.ParseUint(balances.Ong, 10, 64)
+	case "onyx":
+		balance, err = strconv.ParseUint(balances.Onx, 10, 64)
+	case "oxg":
+		balance, err = strconv.ParseUint(balances.Oxg, 10, 64)
 	default:
 		return 0, fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -102,9 +102,9 @@ func GetAccountBalance(address, asset string) (uint64, error) {
 }
 
 func GetAllowance(asset, from, to string) (string, error) {
-	result, ontErr := sendRpcRequest("getallowance", []interface{}{asset, from, to})
-	if ontErr != nil {
-		return "", ontErr.Error
+	result, onxErr := sendRpcRequest("getallowance", []interface{}{asset, from, to})
+	if onxErr != nil {
+		return "", onxErr.Error
 	}
 	balance := ""
 	err := json.Unmarshal(result, &balance)
@@ -114,7 +114,7 @@ func GetAllowance(asset, from, to string) (string, error) {
 	return balance, nil
 }
 
-//Transfer ont|ong from account to another account
+//Transfer onx|oxg from account to another account
 func Transfer(gasPrice, gasLimit uint64, signer *account.Account, asset, from, to string, amount uint64) (string, error) {
 	mutable, err := TransferTx(gasPrice, gasLimit, asset, signer.Address.ToBase58(), to, amount)
 	if err != nil {
@@ -185,7 +185,7 @@ func ApproveTx(gasPrice, gasLimit uint64, asset string, from, to string, amount 
 	if err != nil {
 		return nil, fmt.Errorf("To address:%s invalid:%s", to, err)
 	}
-	var state = &ont.State{
+	var state = &onx.State{
 		From:  fromAddr,
 		To:    toAddr,
 		Value: amount,
@@ -193,12 +193,12 @@ func ApproveTx(gasPrice, gasLimit uint64, asset string, from, to string, amount 
 	var version byte
 	var contractAddr common.Address
 	switch strings.ToLower(asset) {
-	case ASSET_ONT:
-		version = VERSION_CONTRACT_ONT
-		contractAddr = utils.OntContractAddress
-	case ASSET_ONG:
-		version = VERSION_CONTRACT_ONG
-		contractAddr = utils.OngContractAddress
+	case ASSET_ONX:
+		version = VERSION_CONTRACT_ONX
+		contractAddr = utils.OnxContractAddress
+	case ASSET_OXG:
+		version = VERSION_CONTRACT_OXG
+		contractAddr = utils.OxgContractAddress
 	default:
 		return nil, fmt.Errorf("Unsupport asset:%s", asset)
 	}
@@ -219,8 +219,8 @@ func TransferTx(gasPrice, gasLimit uint64, asset, from, to string, amount uint64
 	if err != nil {
 		return nil, fmt.Errorf("to address:%s invalid:%s", to, err)
 	}
-	var sts []*ont.State
-	sts = append(sts, &ont.State{
+	var sts []*onx.State
+	sts = append(sts, &onx.State{
 		From:  fromAddr,
 		To:    toAddr,
 		Value: amount,
@@ -228,12 +228,12 @@ func TransferTx(gasPrice, gasLimit uint64, asset, from, to string, amount uint64
 	var version byte
 	var contractAddr common.Address
 	switch strings.ToLower(asset) {
-	case ASSET_ONT:
-		version = VERSION_CONTRACT_ONT
-		contractAddr = utils.OntContractAddress
-	case ASSET_ONG:
-		version = VERSION_CONTRACT_ONG
-		contractAddr = utils.OngContractAddress
+	case ASSET_ONX:
+		version = VERSION_CONTRACT_ONX
+		contractAddr = utils.OnxContractAddress
+	case ASSET_OXG:
+		version = VERSION_CONTRACT_OXG
+		contractAddr = utils.OxgContractAddress
 	default:
 		return nil, fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -258,7 +258,7 @@ func TransferFromTx(gasPrice, gasLimit uint64, asset, sender, from, to string, a
 	if err != nil {
 		return nil, fmt.Errorf("to address:%s invalid:%s", to, err)
 	}
-	transferFrom := &ont.TransferFrom{
+	transferFrom := &onx.TransferFrom{
 		Sender: senderAddr,
 		From:   fromAddr,
 		To:     toAddr,
@@ -267,12 +267,12 @@ func TransferFromTx(gasPrice, gasLimit uint64, asset, sender, from, to string, a
 	var version byte
 	var contractAddr common.Address
 	switch strings.ToLower(asset) {
-	case ASSET_ONT:
-		version = VERSION_CONTRACT_ONT
-		contractAddr = utils.OntContractAddress
-	case ASSET_ONG:
-		version = VERSION_CONTRACT_ONG
-		contractAddr = utils.OngContractAddress
+	case ASSET_ONX:
+		version = VERSION_CONTRACT_ONX
+		contractAddr = utils.OnxContractAddress
+	case ASSET_OXG:
+		version = VERSION_CONTRACT_OXG
+		contractAddr = utils.OxgContractAddress
 	default:
 		return nil, fmt.Errorf("unsupport asset:%s", asset)
 	}
@@ -436,7 +436,7 @@ func Sign(data []byte, signer *account.Account) ([]byte, error) {
 	return sigData, nil
 }
 
-//SendRawTransaction send a transaction to ontology network, and return hash of the transaction
+//SendRawTransaction send a transaction to onyxchain network, and return hash of the transaction
 func SendRawTransaction(tx *types.Transaction) (string, error) {
 	var buffer bytes.Buffer
 	err := tx.Serialize(&buffer)
@@ -448,9 +448,9 @@ func SendRawTransaction(tx *types.Transaction) (string, error) {
 }
 
 func SendRawTransactionData(txData string) (string, error) {
-	data, ontErr := sendRpcRequest("sendrawtransaction", []interface{}{txData})
-	if ontErr != nil {
-		return "", ontErr.Error
+	data, onxErr := sendRpcRequest("sendrawtransaction", []interface{}{txData})
+	if onxErr != nil {
+		return "", onxErr.Error
 	}
 	hexHash := ""
 	err := json.Unmarshal(data, &hexHash)
@@ -461,9 +461,9 @@ func SendRawTransactionData(txData string) (string, error) {
 }
 
 func PrepareSendRawTransaction(txData string) (*cstates.PreExecResult, error) {
-	data, ontErr := sendRpcRequest("sendrawtransaction", []interface{}{txData, 1})
-	if ontErr != nil {
-		return nil, ontErr.Error
+	data, onxErr := sendRpcRequest("sendrawtransaction", []interface{}{txData, 1})
+	if onxErr != nil {
+		return nil, onxErr.Error
 	}
 	preResult := &cstates.PreExecResult{}
 	err := json.Unmarshal(data, &preResult)
@@ -475,13 +475,13 @@ func PrepareSendRawTransaction(txData string) (*cstates.PreExecResult, error) {
 
 //GetSmartContractEvent return smart contract event execute by invoke transaction by hex string code
 func GetSmartContractEvent(txHash string) (*rpccommon.ExecuteNotify, error) {
-	data, ontErr := sendRpcRequest("getsmartcodeevent", []interface{}{txHash})
-	if ontErr != nil {
-		switch ontErr.ErrorCode {
+	data, onxErr := sendRpcRequest("getsmartcodeevent", []interface{}{txHash})
+	if onxErr != nil {
+		switch onxErr.ErrorCode {
 		case ERROR_INVALID_PARAMS:
 			return nil, fmt.Errorf("invalid TxHash:%s", txHash)
 		}
-		return nil, ontErr.Error
+		return nil, onxErr.Error
 	}
 	notifies := &rpccommon.ExecuteNotify{}
 	err := json.Unmarshal(data, &notifies)
@@ -492,45 +492,45 @@ func GetSmartContractEvent(txHash string) (*rpccommon.ExecuteNotify, error) {
 }
 
 func GetSmartContractEventInfo(txHash string) ([]byte, error) {
-	data, ontErr := sendRpcRequest("getsmartcodeevent", []interface{}{txHash})
-	if ontErr == nil {
+	data, onxErr := sendRpcRequest("getsmartcodeevent", []interface{}{txHash})
+	if onxErr == nil {
 		return data, nil
 	}
-	switch ontErr.ErrorCode {
+	switch onxErr.ErrorCode {
 	case ERROR_INVALID_PARAMS:
 		return nil, fmt.Errorf("invalid TxHash:%s", txHash)
 	}
-	return nil, ontErr.Error
+	return nil, onxErr.Error
 }
 
 func GetRawTransaction(txHash string) ([]byte, error) {
-	data, ontErr := sendRpcRequest("getrawtransaction", []interface{}{txHash, 1})
-	if ontErr == nil {
+	data, onxErr := sendRpcRequest("getrawtransaction", []interface{}{txHash, 1})
+	if onxErr == nil {
 		return data, nil
 	}
-	switch ontErr.ErrorCode {
+	switch onxErr.ErrorCode {
 	case ERROR_INVALID_PARAMS:
 		return nil, fmt.Errorf("invalid TxHash:%s", txHash)
 	}
-	return nil, ontErr.Error
+	return nil, onxErr.Error
 }
 
 func GetBlock(hashOrHeight interface{}) ([]byte, error) {
-	data, ontErr := sendRpcRequest("getblock", []interface{}{hashOrHeight, 1})
-	if ontErr == nil {
+	data, onxErr := sendRpcRequest("getblock", []interface{}{hashOrHeight, 1})
+	if onxErr == nil {
 		return data, nil
 	}
-	switch ontErr.ErrorCode {
+	switch onxErr.ErrorCode {
 	case ERROR_INVALID_PARAMS:
 		return nil, fmt.Errorf("invalid block hash or block height:%v", hashOrHeight)
 	}
-	return nil, ontErr.Error
+	return nil, onxErr.Error
 }
 
 func GetNetworkId() (uint32, error) {
-	data, ontErr := sendRpcRequest("getnetworkid", []interface{}{})
-	if ontErr != nil {
-		return 0, ontErr.Error
+	data, onxErr := sendRpcRequest("getnetworkid", []interface{}{})
+	if onxErr != nil {
+		return 0, onxErr.Error
 	}
 	var networkId uint32
 	err := json.Unmarshal(data, &networkId)
@@ -541,13 +541,13 @@ func GetNetworkId() (uint32, error) {
 }
 
 func GetBlockData(hashOrHeight interface{}) ([]byte, error) {
-	data, ontErr := sendRpcRequest("getblock", []interface{}{hashOrHeight})
-	if ontErr != nil {
-		switch ontErr.ErrorCode {
+	data, onxErr := sendRpcRequest("getblock", []interface{}{hashOrHeight})
+	if onxErr != nil {
+		switch onxErr.ErrorCode {
 		case ERROR_INVALID_PARAMS:
 			return nil, fmt.Errorf("invalid block hash or block height:%v", hashOrHeight)
 		}
-		return nil, ontErr.Error
+		return nil, onxErr.Error
 	}
 	hexStr := ""
 	err := json.Unmarshal(data, &hexStr)
@@ -562,9 +562,9 @@ func GetBlockData(hashOrHeight interface{}) ([]byte, error) {
 }
 
 func GetBlockCount() (uint32, error) {
-	data, ontErr := sendRpcRequest("getblockcount", []interface{}{})
-	if ontErr != nil {
-		return 0, ontErr.Error
+	data, onxErr := sendRpcRequest("getblockcount", []interface{}{})
+	if onxErr != nil {
+		return 0, onxErr.Error
 	}
 	num := uint32(0)
 	err := json.Unmarshal(data, &num)
@@ -575,13 +575,13 @@ func GetBlockCount() (uint32, error) {
 }
 
 func GetTxHeight(txHash string) (uint32, error) {
-	data, ontErr := sendRpcRequest("getblockheightbytxhash", []interface{}{txHash})
-	if ontErr != nil {
-		switch ontErr.ErrorCode {
+	data, onxErr := sendRpcRequest("getblockheightbytxhash", []interface{}{txHash})
+	if onxErr != nil {
+		switch onxErr.ErrorCode {
 		case ERROR_INVALID_PARAMS:
 			return 0, fmt.Errorf("cannot find tx by:%s", txHash)
 		}
-		return 0, ontErr.Error
+		return 0, onxErr.Error
 	}
 	height := uint32(0)
 	err := json.Unmarshal(data, &height)

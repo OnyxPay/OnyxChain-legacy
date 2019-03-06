@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package ledgerstore
@@ -28,7 +28,7 @@ import (
 	"github.com/OnyxPay/OnyxChain-legacy/core/genesis"
 	"github.com/OnyxPay/OnyxChain-legacy/core/payload"
 	"github.com/OnyxPay/OnyxChain-legacy/core/types"
-	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/ont"
+	"github.com/OnyxPay/OnyxChain-legacy/smartcontract/service/native/onx"
 	cstates "github.com/OnyxPay/OnyxChain-legacy/smartcontract/states"
 	"testing"
 	"time"
@@ -355,13 +355,13 @@ func TestBlock(t *testing.T) {
 
 func transferTx(from, to common.Address, amount uint64) (*types.Transaction, error) {
 	buf := bytes.NewBuffer(nil)
-	var sts []*ont.State
-	sts = append(sts, &ont.State{
+	var sts []*onx.State
+	sts = append(sts, &onx.State{
 		From:  from,
 		To:    to,
 		Value: amount,
 	})
-	transfers := &ont.Transfers{
+	transfers := &onx.Transfers{
 		States: sts,
 	}
 	err := transfers.Serialize(buf)
@@ -369,7 +369,7 @@ func transferTx(from, to common.Address, amount uint64) (*types.Transaction, err
 		return nil, fmt.Errorf("transfers.Serialize error %s", err)
 	}
 	var cversion byte
-	return invokeSmartContractTx(0, 30000, vmtypes.Native, cversion, genesis.OntContractAddress, "transfer", buf.Bytes())
+	return invokeSmartContractTx(0, 30000, vmtypes.Native, cversion, genesis.OnxContractAddress, "transfer", buf.Bytes())
 }
 
 func invokeSmartContractTx(gasPrice,

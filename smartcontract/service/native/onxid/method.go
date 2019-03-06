@@ -1,21 +1,21 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ontid
+package onxid
 
 import (
 	"bytes"
@@ -41,50 +41,50 @@ func regIdWithPublicKey(srvc *native.NativeService) ([]byte, error) {
 	// arg0: ID
 	arg0, err := serialization.ReadVarBytes(args)
 	if err != nil {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: parsing argument 0 failed")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: parsing argument 0 failed")
 	} else if len(arg0) == 0 {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: invalid length of argument 0")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: invalid length of argument 0")
 	}
 	// arg1: public key
 	arg1, err := serialization.ReadVarBytes(args)
 	if err != nil {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: parsing argument 1 failed")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: parsing argument 1 failed")
 	}
 
 	log.Debug("arg 0:", hex.EncodeToString(arg0), string(arg0))
 	log.Debug("arg 1:", hex.EncodeToString(arg1))
 
 	if len(arg0) == 0 || len(arg1) == 0 {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: invalid argument")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: invalid argument")
 	}
 
 	if !account.VerifyID(string(arg0)) {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: invalid ID")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: invalid ID")
 	}
 
 	key, err := encodeID(arg0)
 	if err != nil {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: " + err.Error())
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: " + err.Error())
 	}
 
 	if checkIDExistence(srvc, key) {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: already registered")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: already registered")
 	}
 
 	public, err := keypair.DeserializePublicKey(arg1)
 	if err != nil {
 		log.Error(err)
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: invalid public key")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: invalid public key")
 	}
 	addr := types.AddressFromPubKey(public)
 	if !srvc.ContextRef.CheckWitness(addr) {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: checking witness failed")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: checking witness failed")
 	}
 
 	// insert public key
 	_, err = insertPk(srvc, key, arg1)
 	if err != nil {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: store public key error, " + err.Error())
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: store public key error, " + err.Error())
 	}
 	// set flags
 	srvc.CacheDB.Put(key, states.GenRawStorageItem([]byte{flag_exist}))
@@ -105,7 +105,7 @@ func regIdWithAttributes(srvc *native.NativeService) ([]byte, error) {
 		return utils.BYTE_FALSE, errors.New("register ID with attributes error: argument 0 error, invalid length")
 	}
 	if !account.VerifyID(string(arg0)) {
-		return utils.BYTE_FALSE, errors.New("register ONT ID error: invalid ID")
+		return utils.BYTE_FALSE, errors.New("register ONX ID error: invalid ID")
 	}
 
 	// arg1: public key

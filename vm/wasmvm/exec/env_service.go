@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 The ontology Authors
- * This file is part of The ontology library.
+ * Copyright (C) 2019 The onyxchain Authors
+ * This file is part of The onyxchain library.
  *
- * The ontology is free software: you can redistribute it and/or modify
+ * The onyxchain is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The ontology is distributed in the hope that it will be useful,
+ * The onyxchain is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ * along with The onyxchain.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package exec
@@ -81,15 +81,15 @@ func NewInteropService() *InteropService {
 	service.Register("SHA256", hashSha256)
 
 	//parameter apis
-	service.Register("ONT_ReadInt32Param", readInt32Param)
-	service.Register("ONT_ReadInt64Param", readInt64Param)
-	service.Register("ONT_ReadStringParam", readStringParam)
-	service.Register("ONT_JsonUnmashalInput", jsonUnmashal)
-	service.Register("ONT_JsonMashalResult", jsonMashal)
-	service.Register("ONT_JsonMashalParams", jsonMashalParams)
-	service.Register("ONT_RawMashalParams", rawMashalParams)
-	service.Register("ONT_GetCallerAddress", getCaller)
-	service.Register("ONT_GetSelfAddress", getContractAddress)
+	service.Register("ONX_ReadInt32Param", readInt32Param)
+	service.Register("ONX_ReadInt64Param", readInt64Param)
+	service.Register("ONX_ReadStringParam", readStringParam)
+	service.Register("ONX_JsonUnmashalInput", jsonUnmashal)
+	service.Register("ONX_JsonMashalResult", jsonMashal)
+	service.Register("ONX_JsonMashalParams", jsonMashalParams)
+	service.Register("ONX_RawMashalParams", rawMashalParams)
+	service.Register("ONX_GetCallerAddress", getCaller)
+	service.Register("ONX_GetSelfAddress", getContractAddress)
 
 	return &service
 }
